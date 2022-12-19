@@ -49,3 +49,17 @@ pub fn select_all_watchers() -> Result<Vec<Watchers>, rusqlite::Error> {
 
     Ok(watchers)
 }
+
+pub fn select_by_name_watchers(watcher_name: Json<&String>) -> Result<Watchers, rusqlite::Error> {
+    let connection = database::SQLITE_CONNECTION.lock().unwrap();
+    let mut stmt = connection.prepare("SELECT * from watchers WHERE name = ?")?;
+    println!("[{:?}]", watcher_name.as_str());
+    let element = stmt.query_row(&[watcher_name.as_str()], |row| {
+        Ok(Watchers {
+            id: row.get(0)?,
+            name: row.get(1)?,
+            start_date: row.get(2)?,
+        })
+    })?;
+    Ok(element)
+}

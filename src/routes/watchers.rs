@@ -17,12 +17,23 @@ pub fn new_watcher(watcher: Json<Watchers>) -> Status {
 }
 
 #[get("/watchers")]
-pub fn get_all_watchers() -> Json<Vec<Watchers>> {
+pub fn get_all_watchers() -> Result<Json<Vec<Watchers>>, Status> {
     match watchers::select_all_watchers() {
-        Ok(watchers) => Json(watchers),
+        Ok(watchers) => Ok(Json(watchers)),
         Err(err) => {
             println!("{:?}", err);
-            Json(vec![])
+            Err(Status::BadRequest)
+        }
+    }
+}
+
+#[get("/watchers/<name>")]
+pub fn get_by_name_watcher(name: String) -> Result<Json<Watchers>, Status> {
+    match watchers::select_by_name_watchers(Json(&name)) {
+        Ok(watchers) => Ok(Json(watchers)),
+        Err(err) => {
+            println!("{:?}", err);
+            Err(Status::BadRequest)
         }
     }
 }
