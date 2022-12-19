@@ -1,18 +1,18 @@
-// import Rocket
 #[macro_use]
 extern crate rocket;
 
-// add our routes and services modules
+pub mod database;
 mod routes;
 mod services;
 
 // import our routes
-// use routes::date::date_plus_month;
-// use routes::date::get_current_date;
+use routes::watchers::get_all_watchers;
+use routes::watchers::new_watcher;
 
-// start the web server and mount our get route at "/api". Can replace /api with anything
-// or just leave it as "/" as the default location
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/api", routes![])
+    if let Err(err) = database::init_database() {
+        panic!("{:?}", err);
+    }
+    rocket::build().mount("/api", routes![new_watcher, get_all_watchers])
 }
