@@ -23,7 +23,7 @@ pub fn init_database() -> Result<(), rusqlite::Error> {
     connection.execute(
         "create table if not exists working_periods (
              id integer primary key,
-             creation_data TEXT NOT NULL,
+             date TEXT NOT NULL,
              additions interger NOT NULL,
              deletions interger NOT NULL,
              watcher_id integer NOT NULL references watchers(id)

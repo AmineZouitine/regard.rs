@@ -6,12 +6,12 @@ use crate::services::watchers;
 use crate::services::watchers::Watchers;
 
 #[post("/watchers", format = "json", data = "<watcher>")]
-pub fn new_watcher(watcher: Json<Watchers>) -> Status {
+pub fn new_watcher(watcher: Json<Watchers>) -> Result<(), Status> {
     match watchers::init_watchers(&watcher) {
-        Ok(()) => Status::Accepted,
+        Ok(()) => Ok(()),
         Err(err) => {
             println!("{:?}", err);
-            Status::BadRequest
+            Err(Status::BadRequest)
         }
     }
 }
@@ -29,7 +29,7 @@ pub fn get_all_watchers() -> Result<Json<Vec<Watchers>>, Status> {
 
 #[get("/watchers/<name>")]
 pub fn get_by_name_watcher(name: String) -> Result<Json<Watchers>, Status> {
-    match watchers::select_by_name_watchers(Json(&name)) {
+    match watchers::select_by_name_watchers(&name) {
         Ok(watchers) => Ok(Json(watchers)),
         Err(err) => {
             println!("{:?}", err);

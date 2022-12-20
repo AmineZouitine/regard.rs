@@ -9,6 +9,8 @@ mod services;
 use routes::watchers::get_all_watchers;
 use routes::watchers::get_by_name_watcher;
 use routes::watchers::new_watcher;
+use routes::working_periods::get_by_wacher_id_working_periods;
+use routes::working_periods::new_working_periods;
 
 #[launch]
 fn rocket() -> _ {
@@ -17,6 +19,12 @@ fn rocket() -> _ {
     }
     rocket::build().mount(
         "/api",
-        routes![new_watcher, get_by_name_watcher, get_all_watchers],
+        routes![
+            new_watcher,
+            new_working_periods,
+            get_by_name_watcher,
+            get_by_wacher_id_working_periods,
+            get_all_watchers
+        ],
     )
 }

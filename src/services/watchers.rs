@@ -11,15 +11,6 @@ pub struct Watchers {
     pub start_date: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(crate = "rocket::serde")]
-pub struct WorkingPeriods {
-    pub id: Option<i64>,
-    pub date: String,
-    pub additions: u64,
-    pub deletions: u64,
-}
-
 pub fn init_watchers(watcher: &Json<Watchers>) -> Result<(), rusqlite::Error> {
     let connection = database::SQLITE_CONNECTION.lock().unwrap();
     connection.execute(
@@ -50,11 +41,10 @@ pub fn select_all_watchers() -> Result<Vec<Watchers>, rusqlite::Error> {
     Ok(watchers)
 }
 
-pub fn select_by_name_watchers(watcher_name: Json<&String>) -> Result<Watchers, rusqlite::Error> {
+pub fn select_by_name_watchers(watcher_name: &str) -> Result<Watchers, rusqlite::Error> {
     let connection = database::SQLITE_CONNECTION.lock().unwrap();
     let mut stmt = connection.prepare("SELECT * from watchers WHERE name = ?")?;
-    println!("[{:?}]", watcher_name.as_str());
-    let element = stmt.query_row(&[watcher_name.as_str()], |row| {
+    let element = stmt.query_row(&[watcher_name], |row| {
         Ok(Watchers {
             id: row.get(0)?,
             name: row.get(1)?,
