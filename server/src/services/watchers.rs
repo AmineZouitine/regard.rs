@@ -8,14 +8,15 @@ use rusqlite::params;
 pub struct Watchers {
     pub id: Option<i64>,
     pub name: String,
+    pub path: String,
     pub start_date: String,
 }
 
 pub fn init_watchers(watcher: &Json<Watchers>) -> Result<(), rusqlite::Error> {
     let connection = database::SQLITE_CONNECTION.lock().unwrap();
     connection.execute(
-        "INSERT INTO watchers (name, start_time) values (?1, ?2)",
-        (&watcher.name, &watcher.start_date),
+        "INSERT INTO watchers (name, path, start_time) values (?1, ?2, ?3)",
+        (&watcher.name, &watcher.path, &watcher.start_date),
     )?;
 
     Ok(())
@@ -30,7 +31,8 @@ pub fn select_all_watchers() -> Result<Vec<Watchers>, rusqlite::Error> {
         Ok(Watchers {
             id: row.get(0)?,
             name: row.get(1)?,
-            start_date: row.get(2)?,
+            path: row.get(2)?,
+            start_date: row.get(3)?,
         })
     })?;
 
@@ -48,7 +50,8 @@ pub fn select_by_name_watchers(watcher_name: &str) -> Result<Watchers, rusqlite:
         Ok(Watchers {
             id: row.get(0)?,
             name: row.get(1)?,
-            start_date: row.get(2)?,
+            path: row.get(2)?,
+            start_date: row.get(3)?,
         })
     })?;
     Ok(element)

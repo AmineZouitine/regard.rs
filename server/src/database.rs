@@ -16,6 +16,7 @@ pub fn init_database() -> Result<(), rusqlite::Error> {
         "create table if not exists watchers (
              id integer primary key,
              name text not null unique,
+             path text not null unique,
              start_time not null
          )",
         params![],
