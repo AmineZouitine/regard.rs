@@ -1,5 +1,6 @@
 pub mod arguments_manager;
 pub mod requests;
+pub mod utils;
 
 use arguments_manager::ArgumentsManager;
 use arguments_manager::Commands;
@@ -13,24 +14,22 @@ async fn main() {
         Commands::Add {
             path_to_watch,
             watcher_name,
-        } => {
-            requests::add(path_to_watch, watcher_name).await;
-        }
-        Commands::Ls => {}
+        } => requests::add(path_to_watch, watcher_name).await,
+        Commands::Ls => requests::ls().await,
         Commands::Update {
             watcher_name,
             new_path,
-        } => {}
-        Commands::Start { watcher_name } => {}
-        Commands::Stop { watcher_name } => {}
+        } => requests::update(watcher_name, new_path).await,
+        Commands::Start { watcher_name } => requests::start(watcher_name).await,
+        Commands::Stop { watcher_name } => requests::stop(watcher_name).await,
         Commands::Remove { watcher_name } => {}
         Commands::RemoveAll => {}
         Commands::Rename {
             old_watcher_name,
             new_watcher_name,
-        } => {}
+        } => requests::rename(old_watcher_name, new_watcher_name).await,
         Commands::Reset { watcher_name } => {}
         Commands::ResetAll => {}
         Commands::Display => {}
-    }
+    };
 }

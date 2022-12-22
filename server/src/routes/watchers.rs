@@ -48,8 +48,18 @@ pub fn patch_watcher(
     name: String,
     update_watcher: Json<UpdateWatchers>,
 ) -> Result<(), status::BadRequest<String>> {
+    if let Err(err) = watchers::select_by_name_watchers(&name) {
+        return match err {
+            rusqlite::Error::QueryReturnedNoRows => Err(status::BadRequest(Some(format!(
+                "The warcher name '{:?}' doesn't exist.",
+                name
+            )))),
+            _ => Err(status::BadRequest(Some(format!("{:?}", err)))),
+        };
+    }
+
     match watchers::patch_watcher(&name, &update_watcher) {
-        Ok(()) => match select_by_name_watchers(&name) {
+        Ok(()) => match select_by_name_watchers(update_watcher.name.as_ref().unwrap()) {
             Ok(_) => Ok(()),
             Err(err) => match err {
                 rusqlite::Error::QueryReturnedNoRows => Err(status::BadRequest(Some(format!(

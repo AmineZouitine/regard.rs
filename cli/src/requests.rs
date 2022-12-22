@@ -1,7 +1,10 @@
 use chrono;
 use colored::*;
+
 use reqwest::{Client, Response};
 use serde_json::json;
+
+use crate::utils::{display_watchers, server_off, Watcher};
 
 enum Method {
     Get,
@@ -24,15 +27,7 @@ async fn status_message(response: Response, succes_message: &str) {
     }
 }
 
-fn server_off(err: &reqwest::Error) {
-    println!(
-        "{}: Look like the server is off. Please open an issue.\n\nError code: {:?}",
-        "Error".red().bold(),
-        err
-    );
-}
-
-async fn request(url: &str, method: &Method, succes_message: &str) {
+async fn request(url: &str, method: &Method) -> Result<Response, reqwest::Error> {
     let client = Client::new();
 
     let request = match method {
@@ -48,9 +43,9 @@ async fn request(url: &str, method: &Method, succes_message: &str) {
     };
 
     match request.send().await {
-        Ok(response) => status_message(response, succes_message).await,
-        Err(err) => server_off(&err),
-    };
+        Ok(response) => Ok(response),
+        Err(err) => Err(err),
+    }
 }
 
 pub async fn add(path_to_watch: &String, watcher_name: &String) {
@@ -58,5 +53,61 @@ pub async fn add(path_to_watch: &String, watcher_name: &String) {
     let body = json!({"name": &watcher_name, "path": &path_to_watch, "start_date": current_date, "is_active": true}).to_string();
     let url = "http://127.0.0.1:7777/api/watchers/";
 
-    request(url, &Method::Post { body }, "Watcher succesfully added").await;
+    match request(url, &Method::Post { body }).await {
+        Ok(response) => status_message(response, "Watcher succesfully added").await,
+        Err(err) => server_off(&err),
+    }
+}
+
+pub async fn ls() {
+    let url = "http://127.0.0.1:7777/api/watchers/";
+
+    match request(url, &Method::Get).await {
+        Ok(response) => {
+            let watchers = response.json::<Vec<Watcher>>().await.unwrap();
+            display_watchers(&watchers);
+        }
+        Err(err) => server_off(&err),
+    }
+}
+
+pub async fn update(watcher_name: &String, new_path: &String) {
+    let body = json!({ "path": &new_path }).to_string();
+    let url = format!("http://127.0.0.1:7777/api/watchers/{}", &watcher_name);
+
+    match request(&url, &Method::Patch { body }).await {
+        Ok(response) => status_message(response, "Path succesfully updated").await,
+        Err(err) => server_off(&err),
+    }
+}
+
+pub async fn start(watcher_name: &String) {
+    let body = json!({ "is_active": true }).to_string();
+    let url = format!("http://127.0.0.1:7777/api/watchers/{}", &watcher_name);
+
+    match request(&url, &Method::Patch { body }).await {
+        Ok(response) => status_message(response, "Watcher succesfully started").await,
+        Err(err) => server_off(&err),
+    }
+}
+
+
+pub async fn stop(watcher_name: &String) {
+    let body = json!({ "is_active": false }).to_string();
+    let url = format!("http://127.0.0.1:7777/api/watchers/{}", &watcher_name);
+
+    match request(&url, &Method::Patch { body }).await {
+        Ok(response) => status_message(response, "Watcher succesfully started").await,
+        Err(err) => server_off(&err),
+    }
+}
+
+pub async fn rename(old_name: &String, new_name: &String) {
+    let body = json!({ "name": new_name }).to_string();
+    let url = format!("http://127.0.0.1:7777/api/watchers/{}", &old_name);
+
+    match request(&url, &Method::Patch { body }).await {
+        Ok(response) => status_message(response, "Watcher succesfully renamed").await,
+        Err(err) => server_off(&err),
+    }
 }
