@@ -8,6 +8,7 @@ use crate::utils::{display_watchers, server_off, Watcher};
 
 enum Method {
     Get,
+    Delete,
     Post { body: String },
     Patch { body: String },
 }
@@ -32,6 +33,7 @@ async fn request(url: &str, method: &Method) -> Result<Response, reqwest::Error>
 
     let request = match method {
         Method::Get => client.get(url),
+        Method::Delete => client.delete(url),
         Method::Post { body } => client
             .post(url)
             .header("Content-Type", "application/json")
@@ -107,6 +109,15 @@ pub async fn rename(old_name: &String, new_name: &String) {
 
     match request(&url, &Method::Patch { body }).await {
         Ok(response) => status_message(response, "Watcher succesfully renamed").await,
+        Err(err) => server_off(&err),
+    }
+}
+
+pub async fn remove(watcher_name: &String) {
+    let url = format!("http://127.0.0.1:7777/api/watchers/{}", &watcher_name);
+
+    match request(&url, &Method::Delete).await {
+        Ok(response) => status_message(response, "Watcher succesfully deleted").await,
         Err(err) => server_off(&err),
     }
 }

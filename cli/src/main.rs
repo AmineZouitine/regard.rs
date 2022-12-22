@@ -22,7 +22,7 @@ async fn main() {
         } => requests::update(watcher_name, new_path).await,
         Commands::Start { watcher_name } => requests::start(watcher_name).await,
         Commands::Stop { watcher_name } => requests::stop(watcher_name).await,
-        Commands::Remove { watcher_name } => {}
+        Commands::Remove { watcher_name } => requests::remove(watcher_name).await,
         Commands::RemoveAll => {}
         Commands::Rename {
             old_watcher_name,
