@@ -59,16 +59,7 @@ pub fn patch_watcher(
     }
 
     match watchers::patch_watcher(&name, &update_watcher) {
-        Ok(()) => match select_by_name_watchers(update_watcher.name.as_ref().unwrap()) {
-            Ok(_) => Ok(()),
-            Err(err) => match err {
-                rusqlite::Error::QueryReturnedNoRows => Err(status::BadRequest(Some(format!(
-                    "The warcher name '{:?}' doesn't exist.",
-                    name
-                )))),
-                _ => Err(status::BadRequest(Some(format!("{:?}", err)))),
-            },
-        },
+        Ok(_) => Ok(()),
         Err(err) => {
             let extended_error_code = err.sqlite_error_code().unwrap();
             if extended_error_code == rusqlite::ErrorCode::ConstraintViolation {

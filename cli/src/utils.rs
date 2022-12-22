@@ -14,18 +14,23 @@ pub struct Watcher {
 pub fn display_watchers(watchers: &[Watcher]) {
     let mut table = Table::new();
     table.add_row(Row::new(vec![
-        Cell::new("Name"),
-        Cell::new("Path"),
-        Cell::new("Start Date"),
-        Cell::new("Is Active"),
+        Cell::new(&format!("{}", "Name".bold())),
+        Cell::new(&format!("{}", "Path".bold())),
+        Cell::new(&format!("{}", "Start Date".bold())),
+        Cell::new(&format!("{}", "Is Active".bold())),
     ]));
 
     for watcher in watchers {
+        let activity = if watcher.is_active {
+            watcher.is_active.to_string().green().bold()
+        } else {
+            watcher.is_active.to_string().red().bold()
+        };
         table.add_row(Row::new(vec![
-            Cell::new(&watcher.name),
+            Cell::new(&format!("{}", &watcher.name.blue().bold())),
             Cell::new(&watcher.path),
             Cell::new(&watcher.start_date),
-            Cell::new(&watcher.is_active.to_string()),
+            Cell::new(&format!("{}", activity)),
         ]));
     }
     table.printstd();
