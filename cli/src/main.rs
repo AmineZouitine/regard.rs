@@ -28,8 +28,8 @@ async fn main() {
             old_watcher_name,
             new_watcher_name,
         } => requests::rename(old_watcher_name, new_watcher_name).await,
-        Commands::Reset { watcher_name } => {}
-        Commands::ResetAll => {}
+        Commands::Reset { watcher_name } => requests::reset(watcher_name).await,
+        Commands::ResetAll => requests::reset_all().await,
         Commands::Display => {}
     };
 }

@@ -130,3 +130,24 @@ pub async fn remove_all() {
         Err(err) => server_off(&err),
     }
 }
+
+pub async fn reset(watcher_name: &String) {
+    let url = format!(
+        "http://127.0.0.1:7777/api/working_periods/{}",
+        &watcher_name
+    );
+
+    match request(&url, &Method::Delete).await {
+        Ok(response) => status_message(response, "Watcher succesfully deleted").await,
+        Err(err) => server_off(&err),
+    }
+}
+
+pub async fn reset_all() {
+    let url = "http://127.0.0.1:7777/api/working_periods/";
+
+    match request(url, &Method::Delete).await {
+        Ok(response) => status_message(response, "All watcher succesfully reseted").await,
+        Err(err) => server_off(&err),
+    }
+}
