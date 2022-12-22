@@ -91,3 +91,26 @@ pub fn get_by_name_watcher(name: String) -> Result<Json<Watchers>, status::BadRe
         },
     }
 }
+
+#[delete("/watchers/<name>")]
+pub fn delete_by_name_watcher(name: String) -> Result<(), status::BadRequest<String>> {
+    if let Err(err) = watchers::select_by_name_watchers(&name) {
+        return match err {
+            rusqlite::Error::QueryReturnedNoRows => Err(status::BadRequest(Some(format!(
+                "The warcher name '{:?}' doesn't exist.",
+                name
+            )))),
+            _ => Err(status::BadRequest(Some(format!("{:?}", err)))),
+        };
+    }
+    match watchers::delete_by_name_watchers(&name) {
+        Ok(()) => Ok(()),
+        Err(err) => match err {
+            rusqlite::Error::QueryReturnedNoRows => Err(status::BadRequest(Some(format!(
+                "The warcher name '{:?}' doesn't exist.",
+                name
+            )))),
+            _ => Err(status::BadRequest(Some(format!("{:?}", err)))),
+        },
+    }
+}

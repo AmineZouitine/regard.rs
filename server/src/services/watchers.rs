@@ -95,6 +95,15 @@ pub fn select_by_name_watchers(watcher_name: &str) -> Result<Watchers, rusqlite:
     Ok(element)
 }
 
+pub fn delete_by_name_watchers(watcher_name: &str) -> Result<(), rusqlite::Error> {
+    let connection = database::SQLITE_CONNECTION.lock().unwrap();
+    connection.execute(
+        "DELETE FROM watchers WHERE name = ?1",
+        params![watcher_name],
+    )?;
+    Ok(())
+}
+
 pub fn patch_watcher(
     watcher_name: &str,
     update_watcher: &Json<UpdateWatchers>,
