@@ -35,3 +35,27 @@ pub fn get_by_wacher_id_working_periods(
         }
     }
 }
+
+#[delete("/working_periods/<name>")]
+pub fn delete_by_watcher_name_working_periods(
+    name: &str,
+) -> Result<(), status::BadRequest<String>> {
+    match working_periods::delete_by_watcher_name_working_periods(name) {
+        Ok(()) => Ok(()),
+        Err(err) => match err {
+            rusqlite::Error::QueryReturnedNoRows => Err(status::BadRequest(Some(format!(
+                "The warcher name '{:?}' doesn't exist.",
+                name
+            )))),
+            _ => Err(status::BadRequest(Some(format!("{:?}", err)))),
+        },
+    }
+}
+
+#[delete("/working_periods")]
+pub fn delete_all_working_periods() -> Result<(), status::BadRequest<String>> {
+    match working_periods::delete_all_working_periods() {
+        Ok(()) => Ok(()),
+        Err(err) => Err(status::BadRequest(Some(format!("{:?}", err)))),
+    }
+}

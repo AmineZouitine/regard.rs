@@ -27,6 +27,24 @@ pub fn init_working_periods(
     Ok(())
 }
 
+pub fn delete_by_watcher_name_working_periods(name: &str) -> Result<(), rusqlite::Error> {
+    let watcher = watchers::select_by_name_watchers(name)?;
+    let connection = database::SQLITE_CONNECTION.lock().unwrap();
+
+    connection.execute(
+        "DELETE FROM working_periods WHERE watcher_id = ?1",
+        [watcher.id],
+    )?;
+    Ok(())
+}
+
+pub fn delete_all_working_periods() -> Result<(), rusqlite::Error> {
+    let connection = database::SQLITE_CONNECTION.lock().unwrap();
+
+    connection.execute("DELETE FROM working_periods", [])?;
+    Ok(())
+}
+
 pub fn select_all_by_watcher_id_working_periods(
     id: i64,
 ) -> Result<Vec<WorkingPeriods>, rusqlite::Error> {

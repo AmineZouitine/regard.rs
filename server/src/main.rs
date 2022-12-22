@@ -14,6 +14,8 @@ use routes::watchers::get_all_watchers;
 use routes::watchers::get_by_name_watcher;
 use routes::watchers::new_watcher;
 use routes::watchers::patch_watcher;
+use routes::working_periods::delete_all_working_periods;
+use routes::working_periods::delete_by_watcher_name_working_periods;
 use routes::working_periods::get_by_wacher_id_working_periods;
 use routes::working_periods::new_working_periods;
 use std::env;
@@ -58,6 +60,8 @@ fn rocket() -> _ {
                 get_all_active_watchers,
                 delete_by_name_watcher,
                 delete_all_watchers,
+                delete_all_working_periods,
+                delete_by_watcher_name_working_periods,
                 get_all_watchers
             ],
         )
