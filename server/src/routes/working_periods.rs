@@ -1,4 +1,5 @@
 use rocket::http::Status;
+use rocket::response::status;
 use rocket::serde::json::Json;
 
 // import services module
@@ -9,23 +10,28 @@ use crate::services::working_periods::WorkingPeriods;
 pub fn new_working_periods(
     working_periods: Json<WorkingPeriods>,
     name: &str,
-) -> Result<(), Status> {
+) -> Result<(), status::BadRequest<String>> {
     match working_periods::init_working_periods(&working_periods, name) {
         Ok(()) => Ok(()),
-        Err(err) => {
-            println!("{:?}", err);
-            Err(Status::BadRequest)
-        }
+        Err(err) => match err {
+            rusqlite::Error::QueryReturnedNoRows => Err(status::BadRequest(Some(format!(
+                "The warcher name '{:?}' doesn't exist.",
+                name
+            )))),
+            _ => Err(status::BadRequest(Some(format!("{:?}", err)))),
+        },
     }
 }
 
 #[get("/working_periods/<id>")]
-pub fn get_by_wacher_id_working_periods(id: i64) -> Result<Json<Vec<WorkingPeriods>>, Status> {
+pub fn get_by_wacher_id_working_periods(
+    id: i64,
+) -> Result<Json<Vec<WorkingPeriods>>, status::BadRequest<String>> {
     match working_periods::select_all_by_watcher_id_working_periods(id) {
         Ok(working_periods) => Ok(Json(working_periods)),
         Err(err) => {
             println!("{:?}", err);
-            Err(Status::BadRequest)
+            Err(status::BadRequest(Some(format!("{:?}", err))))
         }
     }
 }

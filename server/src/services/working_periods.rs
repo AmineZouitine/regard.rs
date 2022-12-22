@@ -39,7 +39,7 @@ pub fn select_all_by_watcher_id_working_periods(
         Ok(WorkingPeriods {
             id: row.get(0)?,
             date: row.get(1)?,
-            watcher_id: row.get(4)?,
+            watcher_id: row.get(2)?,
         })
     })?;
 
