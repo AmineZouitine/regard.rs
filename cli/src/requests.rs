@@ -138,7 +138,7 @@ pub async fn reset(watcher_name: &String) {
     );
 
     match request(&url, &Method::Delete).await {
-        Ok(response) => status_message(response, "Watcher succesfully deleted").await,
+        Ok(response) => status_message(response, "Watcher succesfully reseted").await,
         Err(err) => server_off(&err),
     }
 }
