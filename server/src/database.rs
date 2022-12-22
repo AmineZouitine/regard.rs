@@ -17,7 +17,8 @@ pub fn init_database() -> Result<(), rusqlite::Error> {
              id integer primary key,
              name text not null unique,
              path text not null unique,
-             start_time not null
+             start_time text not null,
+             is_active bool not null
          )",
         params![],
     )?;
@@ -25,8 +26,6 @@ pub fn init_database() -> Result<(), rusqlite::Error> {
         "create table if not exists working_periods (
              id integer primary key,
              date TEXT NOT NULL,
-             additions interger NOT NULL,
-             deletions interger NOT NULL,
              watcher_id integer NOT NULL references watchers(id)
          )",
         params![],

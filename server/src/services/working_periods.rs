@@ -9,8 +9,6 @@ use crate::services::watchers;
 pub struct WorkingPeriods {
     pub id: Option<i64>,
     pub date: String,
-    pub additions: u64,
-    pub deletions: u64,
     pub watcher_id: Option<i64>,
 }
 
@@ -22,13 +20,8 @@ pub fn init_working_periods(
     let connection = database::SQLITE_CONNECTION.lock().unwrap();
 
     connection.execute(
-        "INSERT INTO working_periods (date, additions, deletions, watcher_id) values (?1, ?2, ?3, ?4)",
-        (
-            &working_periods.date,
-            &working_periods.additions,
-            &working_periods.deletions,
-            &watcher.id,
-        ),
+        "INSERT INTO working_periods (date, watcher_id) values (?1, ?2)",
+        (&working_periods.date, &watcher.id),
     )?;
 
     Ok(())
@@ -46,8 +39,6 @@ pub fn select_all_by_watcher_id_working_periods(
         Ok(WorkingPeriods {
             id: row.get(0)?,
             date: row.get(1)?,
-            additions: row.get(2)?,
-            deletions: row.get(3)?,
             watcher_id: row.get(4)?,
         })
     })?;
