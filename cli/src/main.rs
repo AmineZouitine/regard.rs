@@ -1,6 +1,11 @@
 pub mod arguments_manager;
 pub mod requests;
 pub mod utils;
+pub mod verification;
+
+use verification::{get_absolute_path, valid_name, valid_path};
+
+use std::path::Path;
 
 use arguments_manager::ArgumentsManager;
 use arguments_manager::Commands;
@@ -14,21 +19,53 @@ async fn main() {
         Commands::Add {
             path_to_watch,
             watcher_name,
-        } => requests::add(path_to_watch, watcher_name).await,
+        } => {
+            if valid_name(watcher_name) && valid_path(path_to_watch) {
+                if let Ok(absolute_path) = get_absolute_path(path_to_watch) {
+                    requests::add(&absolute_path, watcher_name).await;
+                }
+            }
+        }
         Commands::Ls => requests::ls().await,
         Commands::Update {
             watcher_name,
             new_path,
-        } => requests::update(watcher_name, new_path).await,
-        Commands::Start { watcher_name } => requests::start(watcher_name).await,
-        Commands::Stop { watcher_name } => requests::stop(watcher_name).await,
-        Commands::Remove { watcher_name } => requests::remove(watcher_name).await,
+        } => {
+            if valid_name(watcher_name) && valid_path(new_path) {
+                if let Ok(absolute_path) = get_absolute_path(new_path) {
+                    requests::update(watcher_name, &absolute_path).await;
+                }
+            }
+        }
+        Commands::Start { watcher_name } => {
+            if valid_name(watcher_name) {
+                requests::start(watcher_name).await;
+            }
+        }
+        Commands::Stop { watcher_name } => {
+            if valid_name(watcher_name) {
+                requests::stop(watcher_name).await;
+            }
+        }
+        Commands::Remove { watcher_name } => {
+            if valid_name(watcher_name) {
+                requests::remove(watcher_name).await;
+            }
+        }
         Commands::RemoveAll => requests::remove_all().await,
         Commands::Rename {
             old_watcher_name,
             new_watcher_name,
-        } => requests::rename(old_watcher_name, new_watcher_name).await,
-        Commands::Reset { watcher_name } => requests::reset(watcher_name).await,
+        } => {
+            if valid_name(old_watcher_name) && valid_name(new_watcher_name) {
+                requests::rename(old_watcher_name, new_watcher_name).await;
+            }
+        }
+        Commands::Reset { watcher_name } => {
+            if valid_name(watcher_name) {
+                requests::reset(watcher_name).await;
+            }
+        }
         Commands::ResetAll => requests::reset_all().await,
         Commands::Display => {}
     };
