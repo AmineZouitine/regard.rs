@@ -24,6 +24,14 @@ async fn status_message(response: Response, succes_message: &str) {
     }
 }
 
+fn server_off(err: &reqwest::Error) {
+    println!(
+        "{}: Look like the server is off. Please open an issue.\n\nError code: {:?}",
+        "Error".red().bold(),
+        err
+    );
+}
+
 async fn request(url: &str, method: &Method, succes_message: &str) {
     let client = Client::new();
 
@@ -39,8 +47,10 @@ async fn request(url: &str, method: &Method, succes_message: &str) {
             .body(body.clone()),
     };
 
-    let response = request.send().await.unwrap();
-    status_message(response, succes_message).await;
+    match request.send().await {
+        Ok(response) => status_message(response, succes_message).await,
+        Err(err) => server_off(&err),
+    };
 }
 
 pub async fn add(path_to_watch: &String, watcher_name: &String) {
