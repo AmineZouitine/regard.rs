@@ -1,4 +1,3 @@
-use futures::future::ok;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
