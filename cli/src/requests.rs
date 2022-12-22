@@ -121,3 +121,12 @@ pub async fn remove(watcher_name: &String) {
         Err(err) => server_off(&err),
     }
 }
+
+pub async fn remove_all() {
+    let url = "http://127.0.0.1:7777/api/watchers/";
+
+    match request(url, &Method::Delete).await {
+        Ok(response) => status_message(response, "All watchers succesfully deleted").await,
+        Err(err) => server_off(&err),
+    }
+}

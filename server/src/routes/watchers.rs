@@ -114,3 +114,11 @@ pub fn delete_by_name_watcher(name: String) -> Result<(), status::BadRequest<Str
         },
     }
 }
+
+#[delete("/watchers")]
+pub fn delete_all_watchers() -> Result<(), status::BadRequest<String>> {
+    match watchers::delete_all_watcher() {
+        Ok(()) => Ok(()),
+        Err(err) => Err(status::BadRequest(Some(format!("{:?}", err)))),
+    }
+}

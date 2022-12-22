@@ -104,6 +104,12 @@ pub fn delete_by_name_watchers(watcher_name: &str) -> Result<(), rusqlite::Error
     Ok(())
 }
 
+pub fn delete_all_watcher() -> Result<(), rusqlite::Error> {
+    let connection = database::SQLITE_CONNECTION.lock().unwrap();
+    connection.execute("DELETE FROM watchers", [])?;
+    Ok(())
+}
+
 pub fn patch_watcher(
     watcher_name: &str,
     update_watcher: &Json<UpdateWatchers>,

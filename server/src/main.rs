@@ -5,10 +5,9 @@ pub mod database;
 mod routes;
 mod services;
 
-use rusqlite::{params, ToSql};
-
 use rocket::Config;
 // import our routes
+use routes::watchers::delete_all_watchers;
 use routes::watchers::delete_by_name_watcher;
 use routes::watchers::get_all_active_watchers;
 use routes::watchers::get_all_watchers;
@@ -58,6 +57,7 @@ fn rocket() -> _ {
                 get_by_wacher_id_working_periods,
                 get_all_active_watchers,
                 delete_by_name_watcher,
+                delete_all_watchers,
                 get_all_watchers
             ],
         )
