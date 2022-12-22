@@ -10,7 +10,6 @@ lazy_static! {
         Mutex::new(rusqlite::Connection::open("watch.db").unwrap());
 }
 
-
 pub fn init_database() -> Result<(), rusqlite::Error> {
     let connection = SQLITE_CONNECTION.lock().unwrap();
     connection.execute(

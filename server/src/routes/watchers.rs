@@ -2,8 +2,8 @@ use rocket::response::status;
 use rocket::serde::json::Json;
 
 // import services module
+use crate::services::watchers::Watchers;
 use crate::services::watchers::{self, UpdateWatchers};
-use crate::services::watchers::{select_by_name_watchers, Watchers};
 
 #[post("/watchers", format = "json", data = "<watcher>")]
 pub fn new_watcher(watcher: Json<Watchers>) -> Result<(), status::BadRequest<String>> {

@@ -91,7 +91,6 @@ pub async fn start(watcher_name: &String) {
     }
 }
 
-
 pub async fn stop(watcher_name: &String) {
     let body = json!({ "is_active": false }).to_string();
     let url = format!("http://127.0.0.1:7777/api/watchers/{}", &watcher_name);
