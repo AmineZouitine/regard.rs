@@ -1,0 +1,40 @@
+{
+  "name": "regard",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@fullcalendar/core": "^6.0.1",
+    "@fullcalendar/daygrid": "^6.0.1",
+    "@fullcalendar/list": "^6.0.1",
+    "@fullcalendar/timegrid": "^6.0.1",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/material": "^5.11.1",
+    "@mui/x-data-grid": "^5.17.16",
+    "@nivo/bar": "^0.80.0",
+    "@nivo/core": "^0.80.0",
+    "@nivo/line": "^0.80.0",
+    "@nivo/pie": "^0.80.0",
+    "axios": "^1.2.1",
+    "formik": "^2.2.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.7.1",
+    "react-pro-sidebar": "^0.7.1",
+    "react-query": "^3.39.2",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.26",
+    "@types/react-dom": "^18.0.9",
+    "@vitejs/plugin-react": "^3.0.0",
+    "vite": "^4.0.0"
+  }
+}

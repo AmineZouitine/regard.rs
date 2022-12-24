@@ -7,6 +7,9 @@ mod services;
 
 use rocket::Config;
 // import our routes
+use rocket::fairing::{Fairing, Info, Kind};
+use rocket::http::Header;
+use rocket::{Request, Response};
 use routes::watchers::delete_all_watchers;
 use routes::watchers::delete_by_name_watcher;
 use routes::watchers::get_all_active_watchers;
@@ -19,6 +22,28 @@ use routes::working_periods::delete_by_watcher_name_working_periods;
 use routes::working_periods::get_by_wacher_id_working_periods;
 use routes::working_periods::new_working_periods;
 use std::env;
+
+pub struct CORS;
+
+#[rocket::async_trait]
+impl Fairing for CORS {
+    fn info(&self) -> Info {
+        Info {
+            name: "Add CORS headers to responses",
+            kind: Kind::Response,
+        }
+    }
+
+    async fn on_response<'r>(&self, _request: &'r Request<'_>, response: &mut Response<'r>) {
+        response.set_header(Header::new("Access-Control-Allow-Origin", "*"));
+        response.set_header(Header::new(
+            "Access-Control-Allow-Methods",
+            "POST, GET, PATCH, OPTIONS",
+        ));
+        response.set_header(Header::new("Access-Control-Allow-Headers", "*"));
+        response.set_header(Header::new("Access-Control-Allow-Credentials", "true"));
+    }
+}
 
 #[launch]
 fn rocket() -> _ {
@@ -66,4 +91,5 @@ fn rocket() -> _ {
             ],
         )
         .configure(config)
+        .attach(CORS)
 }
