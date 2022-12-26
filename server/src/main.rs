@@ -16,6 +16,7 @@ use routes::watchers::get_all_active_watchers;
 use routes::watchers::get_all_watchers;
 use routes::watchers::get_by_name_watcher;
 use routes::watchers::new_watcher;
+use routes::watchers::options_watcher;
 use routes::watchers::patch_watcher;
 use routes::working_periods::delete_all_working_periods;
 use routes::working_periods::delete_by_watcher_name_working_periods;
@@ -24,7 +25,6 @@ use routes::working_periods::new_working_periods;
 use std::env;
 
 pub struct CORS;
-
 #[rocket::async_trait]
 impl Fairing for CORS {
     fn info(&self) -> Info {
@@ -36,10 +36,7 @@ impl Fairing for CORS {
 
     async fn on_response<'r>(&self, _request: &'r Request<'_>, response: &mut Response<'r>) {
         response.set_header(Header::new("Access-Control-Allow-Origin", "*"));
-        response.set_header(Header::new(
-            "Access-Control-Allow-Methods",
-            "POST, GET, PATCH, OPTIONS",
-        ));
+        response.set_header(Header::new("Access-Control-Allow-Methods", "*"));
         response.set_header(Header::new("Access-Control-Allow-Headers", "*"));
         response.set_header(Header::new("Access-Control-Allow-Credentials", "true"));
     }
@@ -87,7 +84,8 @@ fn rocket() -> _ {
                 delete_all_watchers,
                 delete_all_working_periods,
                 delete_by_watcher_name_working_periods,
-                get_all_watchers
+                get_all_watchers,
+                options_watcher
             ],
         )
         .configure(config)

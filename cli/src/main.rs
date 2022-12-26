@@ -5,8 +5,6 @@ pub mod verification;
 
 use verification::{get_absolute_path, valid_name, valid_path};
 
-use std::path::Path;
-
 use arguments_manager::ArgumentsManager;
 use arguments_manager::Commands;
 use clap::Parser;

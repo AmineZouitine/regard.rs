@@ -1,4 +1,3 @@
-use rocket::http::Status;
 use rocket::response::status;
 use rocket::serde::json::Json;
 

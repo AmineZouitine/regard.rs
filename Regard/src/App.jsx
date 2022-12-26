@@ -6,6 +6,7 @@ import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
 import Table from "./scenes/table";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Routes, Route } from "react-router-dom";
 
 const queryClient = new QueryClient();
 function App() {
@@ -19,8 +20,10 @@ function App() {
               <Sidebar />
               <main className="content">
                 <Topbar />
-                {/* <Dashboard /> */}
-                <Table />
+                <Routes>
+                  <Route path={"/"} element={<Dashboard />} />
+                  <Route path={"/watchers"} element={<Table />} />
+                </Routes>
               </main>
             </div>
           </CssBaseline>

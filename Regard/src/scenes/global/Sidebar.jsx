@@ -11,8 +11,10 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import Logo from "../../asset/vite.svg";
+import { Link } from "react-router-dom";
+import PreviewIcon from "@mui/icons-material/Preview";
 
-const Item = ({ title, icon, selected, setSelected }) => {
+const Item = ({ title, icon, to, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
@@ -25,6 +27,7 @@ const Item = ({ title, icon, selected, setSelected }) => {
       icon={icon}
     >
       <Typography>{title}</Typography>
+      <Link to={to} />
     </MenuItem>
   );
 };
@@ -127,9 +130,9 @@ const Sidebar = () => {
               Pages
             </Typography>
             <Item
-              title="Table"
-              to="/form"
-              icon={<GridOnIcon />}
+              title="watchers"
+              to="/Watchers"
+              icon={<PreviewIcon />}
               selected={selected}
               setSelected={setSelected}
             />

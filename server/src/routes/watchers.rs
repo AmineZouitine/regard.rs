@@ -122,3 +122,8 @@ pub fn delete_all_watchers() -> Result<(), status::BadRequest<String>> {
         Err(err) => Err(status::BadRequest(Some(format!("{:?}", err)))),
     }
 }
+
+#[options("/watchers/<watcher_name>")]
+pub fn options_watcher(watcher_name: String) -> String {
+    watcher_name
+}

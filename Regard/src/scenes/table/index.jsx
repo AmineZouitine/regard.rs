@@ -1,10 +1,11 @@
-import { Box, Typography, useTheme, Button } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { getWatchers } from "../../data/watchers";
 import { useQuery } from "react-query";
 import { formatDate } from "./utils";
+import EditButton from "./EditButton";
 
 const Table = () => {
   const theme = useTheme();
@@ -52,6 +53,13 @@ const Table = () => {
             <label>{status}</label>
           </Box>
         );
+      },
+    },
+    {
+      field: "",
+      headerName: "Modifcation",
+      renderCell: ({ row }) => {
+        return <EditButton data={row} />;
       },
     },
   ];
