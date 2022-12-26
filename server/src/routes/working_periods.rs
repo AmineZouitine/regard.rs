@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use rocket::response::status;
 use rocket::serde::json::Json;
 
@@ -60,11 +62,20 @@ pub fn delete_all_working_periods() -> Result<(), status::BadRequest<String>> {
 }
 
 #[get("/working_periods/time/<id>")]
-pub fn get_by_wacher_id_working_periods_time(
+pub fn get_by_watcher_id_working_periods_time(
     id: i64,
 ) -> Result<Json<Vec<WatcherTime>>, status::BadRequest<String>> {
-    match working_periods::get_by_wacher_id_working_periods_time(id) {
+    match working_periods::get_by_watcher_id_working_periods_time(id) {
         Ok(watcher_time) => Ok(Json(watcher_time)),
+        Err(err) => Err(status::BadRequest(Some(format!("{:?}", err)))),
+    }
+}
+
+#[get("/working_periods/time")]
+pub fn get_all_working_periods_time(
+) -> Result<Json<HashMap<String, Vec<WatcherTime>>>, status::BadRequest<String>> {
+    match working_periods::get_all_working_periods_time() {
+        Ok(watcher_time_by_name) => Ok(Json(watcher_time_by_name)),
         Err(err) => Err(status::BadRequest(Some(format!("{:?}", err)))),
     }
 }

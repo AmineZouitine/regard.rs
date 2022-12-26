@@ -1,7 +1,10 @@
+use std::collections::HashMap;
+
 use crate::database;
 use chrono::DateTime;
 use rocket::serde::json::Json;
 use rocket::serde::{Deserialize, Serialize};
+use rocket::tokio::sync::watch;
 
 use crate::services::watchers;
 
@@ -83,7 +86,9 @@ pub fn select_all_by_watcher_id_working_periods(
     Ok(working_periods)
 }
 
-pub fn get_by_wacher_id_working_periods_time(id: i64) -> Result<Vec<WatcherTime>, rusqlite::Error> {
+pub fn get_by_watcher_id_working_periods_time(
+    id: i64,
+) -> Result<Vec<WatcherTime>, rusqlite::Error> {
     let working_periods = select_all_by_watcher_id_working_periods(id)?;
     let mut watcher_times = Vec::new();
 
@@ -146,4 +151,19 @@ fn calculate_total_time(start_date: &String, end_date: &String) -> i64 {
             .signed_duration_since(start_date_time)
             .num_minutes()
     }
+}
+
+pub fn get_all_working_periods_time() -> Result<HashMap<String, Vec<WatcherTime>>, rusqlite::Error>
+{
+    let watchers = watchers::select_all_watchers()?;
+    let mut working_periods_by_watcher = HashMap::new();
+
+    for watcher in watchers {
+        let watcher_id = watcher.id.unwrap();
+        let watcher_name = watcher.name;
+        let watcher_times = get_by_watcher_id_working_periods_time(watcher_id)?;
+        working_periods_by_watcher.insert(watcher_name, watcher_times);
+    }
+
+    Ok(working_periods_by_watcher)
 }
