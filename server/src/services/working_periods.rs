@@ -1,4 +1,5 @@
 use crate::database;
+use chrono::DateTime;
 use rocket::serde::json::Json;
 use rocket::serde::{Deserialize, Serialize};
 
@@ -10,6 +11,14 @@ pub struct WorkingPeriods {
     pub id: Option<i64>,
     pub date: String,
     pub watcher_id: Option<i64>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(crate = "rocket::serde")]
+pub struct WatcherTime {
+    pub start_date: String,
+    pub end_date: String,
+    pub total_time: i64,
 }
 
 pub fn init_working_periods(
@@ -65,5 +74,76 @@ pub fn select_all_by_watcher_id_working_periods(
         working_periods.push(working_period?);
     }
 
+    working_periods.sort_by(|a, b| {
+        let a_date = DateTime::parse_from_rfc3339(&a.date).unwrap();
+        let b_date = DateTime::parse_from_rfc3339(&b.date).unwrap();
+        a_date.cmp(&b_date)
+    });
+
     Ok(working_periods)
+}
+
+pub fn get_by_wacher_id_working_periods_time(id: i64) -> Result<Vec<WatcherTime>, rusqlite::Error> {
+    let working_periods = select_all_by_watcher_id_working_periods(id)?;
+    let mut watcher_times = Vec::new();
+
+    let mut current_session = Vec::new();
+    for period in working_periods {
+        let period_date = DateTime::parse_from_rfc3339(&period.date).unwrap();
+        if current_session.is_empty() {
+            // If the current session is empty, add the working period to it
+            current_session.push(period);
+        } else {
+            // If the current session is not empty, compare the difference in time with the last working period in the session
+            let last_period = current_session.last().unwrap();
+            let last_period_date = DateTime::parse_from_rfc3339(&last_period.date).unwrap();
+            let time_difference = period_date
+                .signed_duration_since(last_period_date)
+                .num_seconds();
+            if time_difference <= 120 {
+                // If the difference in time is less than 2 minutes, add the working period to the current session
+                current_session.push(period);
+            } else {
+                // If the difference in time is greater than 2 minutes, create a new WatcherTime and add it to the watcher_times vector
+                let start_date = current_session.first().unwrap().date.clone();
+                let end_date = current_session.last().unwrap().date.clone();
+                let total_time = calculate_total_time(&start_date, &end_date);
+                let watcher_time = WatcherTime {
+                    start_date,
+                    end_date,
+                    total_time,
+                };
+                watcher_times.push(watcher_time);
+                // Reset the current session and add the current working period to it
+                current_session = vec![period];
+            }
+        }
+    }
+
+    // Don't forget to add the last session to the watcher_times vector
+    if !current_session.is_empty() {
+        let start_date = current_session.first().unwrap().date.clone();
+        let end_date = current_session.last().unwrap().date.clone();
+        let total_time = calculate_total_time(&start_date, &end_date);
+        let watcher_time = WatcherTime {
+            start_date,
+            end_date,
+            total_time,
+        };
+        watcher_times.push(watcher_time);
+    }
+
+    Ok(watcher_times)
+}
+
+fn calculate_total_time(start_date: &String, end_date: &String) -> i64 {
+    let start_date_time = DateTime::parse_from_rfc3339(start_date).unwrap();
+    let end_date_time = DateTime::parse_from_rfc3339(end_date).unwrap();
+    if start_date == end_date {
+        2
+    } else {
+        end_date_time
+            .signed_duration_since(start_date_time)
+            .num_minutes()
+    }
 }

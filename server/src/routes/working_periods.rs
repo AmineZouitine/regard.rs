@@ -2,8 +2,8 @@ use rocket::response::status;
 use rocket::serde::json::Json;
 
 // import services module
-use crate::services::working_periods;
 use crate::services::working_periods::WorkingPeriods;
+use crate::services::working_periods::{self, WatcherTime};
 
 #[post("/working_periods/<name>", format = "json", data = "<working_periods>")]
 pub fn new_working_periods(
@@ -55,6 +55,16 @@ pub fn delete_by_watcher_name_working_periods(
 pub fn delete_all_working_periods() -> Result<(), status::BadRequest<String>> {
     match working_periods::delete_all_working_periods() {
         Ok(()) => Ok(()),
+        Err(err) => Err(status::BadRequest(Some(format!("{:?}", err)))),
+    }
+}
+
+#[get("/working_periods/time/<id>")]
+pub fn get_by_wacher_id_working_periods_time(
+    id: i64,
+) -> Result<Json<Vec<WatcherTime>>, status::BadRequest<String>> {
+    match working_periods::get_by_wacher_id_working_periods_time(id) {
+        Ok(watcher_time) => Ok(Json(watcher_time)),
         Err(err) => Err(status::BadRequest(Some(format!("{:?}", err)))),
     }
 }

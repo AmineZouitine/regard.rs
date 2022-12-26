@@ -51,7 +51,7 @@ async fn request(url: &str, method: &Method) -> Result<Response, reqwest::Error>
 }
 
 pub async fn add(path_to_watch: &String, watcher_name: &String) {
-    let current_date = chrono::offset::Local::now().to_string();
+    let current_date = chrono::Local::now().to_rfc3339();
     let body = json!({"name": &watcher_name, "path": &path_to_watch, "start_date": current_date, "is_active": true}).to_string();
     let url = "http://127.0.0.1:7777/api/watchers/";
 

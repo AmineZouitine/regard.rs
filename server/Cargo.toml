@@ -10,3 +10,4 @@ rocket = { version = "0.5.0-rc.2", features = ["json"] }
 rusqlite = "0.28.0"
 lazy_static = "1.4.0"
 serde = "1.0.151"
+chrono = "0.4.23"
