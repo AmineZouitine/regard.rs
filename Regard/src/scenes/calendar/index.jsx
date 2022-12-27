@@ -116,7 +116,13 @@ const HoursInfo = ({ title, value }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
-    <Box bgcolor={colors.primary[500]} my={2} borderRadius={"5px"} p={2}>
+    <Box
+      bgcolor={colors.primary[500]}
+      my={2}
+      borderRadius={"5px"}
+      p={2}
+      boxShadow="2px 2px black"
+    >
       <Typography align="center" variant="h4">
         {title}
       </Typography>

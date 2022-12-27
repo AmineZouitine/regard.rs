@@ -3,7 +3,6 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
-import Dashboard from "./scenes/dashboard";
 import Table from "./scenes/table";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Routes, Route } from "react-router-dom";
@@ -22,9 +21,8 @@ function App() {
               <main className="content">
                 <Topbar />
                 <Routes>
-                  <Route path={"/"} element={<Dashboard />} />
+                  <Route path={"/"} element={<Calendar />} />
                   <Route path={"/watchers"} element={<Table />} />
-                  <Route path={"/calendar"} element={<Calendar />} />
                 </Routes>
               </main>
             </div>
