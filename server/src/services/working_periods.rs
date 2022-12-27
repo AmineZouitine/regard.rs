@@ -105,7 +105,7 @@ pub fn get_by_watcher_id_working_periods_time(
             let time_difference = period_date
                 .signed_duration_since(last_period_date)
                 .num_seconds();
-            if time_difference <= 120 {
+            if time_difference <= 600 {
                 // If the difference in time is less than 2 minutes, add the working period to the current session
                 current_session.push(period);
             } else {
