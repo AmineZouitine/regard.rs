@@ -20,3 +20,10 @@ export const patchWatcher = async ({ watcherName, body }) => {
   );
   return responce.data;
 };
+
+export const getWatchersTime = async () => {
+  let responce = await axios.get(
+    "http://127.0.0.1:7777/api/working_periods/time"
+  );
+  return responce.data;
+};

@@ -7,6 +7,7 @@ import Dashboard from "./scenes/dashboard";
 import Table from "./scenes/table";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Routes, Route } from "react-router-dom";
+import Calendar from "./scenes/calendar";
 
 const queryClient = new QueryClient();
 function App() {
@@ -23,6 +24,7 @@ function App() {
                 <Routes>
                   <Route path={"/"} element={<Dashboard />} />
                   <Route path={"/watchers"} element={<Table />} />
+                  <Route path={"/calendar"} element={<Calendar />} />
                 </Routes>
               </main>
             </div>
