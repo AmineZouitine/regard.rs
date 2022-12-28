@@ -57,7 +57,7 @@ const Table = () => {
     },
     {
       field: "",
-      headerName: "Modifcation",
+      headerName: "",
       renderCell: ({ row }) => {
         return <EditButton data={row} />;
       },
