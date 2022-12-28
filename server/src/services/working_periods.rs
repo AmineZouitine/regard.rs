@@ -105,11 +105,12 @@ pub fn get_by_watcher_id_working_periods_time(
             let time_difference = period_date
                 .signed_duration_since(last_period_date)
                 .num_seconds();
-            if time_difference <= 600 {
-                // If the difference in time is less than 2 minutes, add the working period to the current session
+
+            if time_difference <= 600 && period_date.date_naive() == last_period_date.date_naive() {
+                // If the difference in time is less than 2 minutes and the working periods are on the same day, add the working period to the current session
                 current_session.push(period);
             } else {
-                // If the difference in time is greater than 2 minutes, create a new WatcherTime and add it to the watcher_times vector
+                // If the difference in time is greater than 2 minutes or the working periods are on different days, create a new WatcherTime and add it to the watcher_times vector
                 let start_date = current_session.first().unwrap().date.clone();
                 let end_date = current_session.last().unwrap().date.clone();
                 let total_time = calculate_total_time(&start_date, &end_date);

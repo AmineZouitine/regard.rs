@@ -36,3 +36,14 @@ body,
 {
   background-color: #555;
 }
+
+
+
+tbody {
+  --fc-page-bg-color: #70d8bd
+}
+
+tr
+{
+  --fc-list-event-hover-bg-color: grey;
+}

@@ -3,7 +3,7 @@ function padTo2Digits(num) {
 }
 
 export function formatDate(date_str) {
-  let date = new Date(new Date().toISOString(date_str));
+  let date = new Date(date_str);
 
   return (
     [
