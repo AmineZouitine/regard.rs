@@ -105,7 +105,7 @@ const getHours = (data, filter) => {
 
   // Return the total times
   return {
-    day: totalTimeToday === 0 ? 0 : (totalTimeToday / 60).toFixed(2) === 0,
+    day: totalTimeToday === 0 ? 0 : (totalTimeToday / 60).toFixed(2),
     week: totalTimeThisWeek === 0 ? 0 : (totalTimeThisWeek / 60).toFixed(2),
     month: totalTimeThisMonth === 0 ? 0 : (totalTimeThisMonth / 60).toFixed(2),
     year: totalTimeThisYear === 0 ? 0 : (totalTimeThisYear / 60).toFixed(2),

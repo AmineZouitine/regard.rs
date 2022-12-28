@@ -1,7 +1,7 @@
+use chrono;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use std::path::Path;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Watchers {
@@ -11,17 +11,17 @@ pub struct Watchers {
     pub start_date: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct WorkingPeriods {
+    pub id: Option<i64>,
     pub date: String,
-    pub additions: u64,
-    pub deletions: u64,
+    pub watcher_id: Option<i64>,
 }
 
-pub async fn get_watchers() -> Result<Vec<Watchers>, &'static str> {
+pub async fn get_active_watchers() -> Result<Vec<Watchers>, &'static str> {
     let client = Client::new();
     let response = client
-        .get("http://127.0.0.1:8000/api/watchers/active")
+        .get("http://127.0.0.1:7777/api/watchers/active")
         .send()
         .await
         .unwrap();
@@ -30,10 +30,7 @@ pub async fn get_watchers() -> Result<Vec<Watchers>, &'static str> {
         reqwest::StatusCode::OK => {
             // on success, parse our JSON to an APIResponse
             match response.json::<Vec<Watchers>>().await {
-                Ok(mut watchers) => {
-                    path_verifications(&mut watchers).await;
-                    Ok(watchers)
-                }
+                Ok(watchers) => Ok(watchers),
                 Err(_) => Err("The response didn't match the shape we expected."),
             }
         }
@@ -41,26 +38,12 @@ pub async fn get_watchers() -> Result<Vec<Watchers>, &'static str> {
     }
 }
 
-async fn path_verifications(watchers: &mut Vec<Watchers>) {
-    let watchers_to_remove = watchers
-        .iter()
-        .filter(|watcher| !Path::new(&watcher.path).exists())
-        .map(|watcher| &watcher.name)
-        .collect::<Vec<_>>();
-
-    for name in watchers_to_remove {
-        make_watcher_inactive(name).await.unwrap();
-    }
-
-    watchers.retain(|watcher| Path::new(&watcher.path).exists());
-}
-
 pub async fn make_watcher_inactive(watcher_name: &str) -> Result<(), &'static str> {
     let body = json!({"is_active": false});
     let client = Client::new();
     client
-        .post(format!(
-            "http://127.0.0.1:8000/api/working_periods/{}",
+        .patch(format!(
+            "http://127.0.0.1:7777/api/watchers/{}",
             watcher_name
         ))
         .header("Content-Type", "application/json")
@@ -72,25 +55,39 @@ pub async fn make_watcher_inactive(watcher_name: &str) -> Result<(), &'static st
     Ok(())
 }
 
-// fn handle_modification(path: &str) {
-//     if path_name_mapping.contains_key(&event.paths[0].to_string_lossy().to_string()) {
-//         let watcher_name = path_name_mapping
-//             .get(&event.paths[0].to_string_lossy().to_string())
-//             .unwrap();
-//         println!("WATCHER_NAME = {:?}", watcher_name);
+pub async fn new_working_periods(watcher_name: &str) -> Result<(), &'static str> {
+    let current_date = chrono::Local::now().to_rfc3339();
+    let body = json!({ "date": current_date });
+    let client = Client::new();
+    client
+        .post(format!(
+            "http://127.0.0.1:7777/api/working_periods/{}",
+            watcher_name
+        ))
+        .header("Content-Type", "application/json")
+        .body(body.to_string())
+        .send()
+        .await
+        .unwrap();
+    Ok(())
+}
 
-//         let client = Client::new();
-//         let body = json!({"date": "coucou", "additions": 2, "deletions": 1});
-//         let response = client
-//             .post(format!(
-//                 "http://127.0.0.1:8000/api/working_periods/{}",
-//                 watcher_name
-//             ))
-//             .header("Content-Type", "application/json")
-//             .body(body.to_string())
-//             .send()
-//             .await
-//             .unwrap();
-//         println!("Status = {:?}", response.status());
-//     }
-// }
+pub async fn get_working_periods(id: i64) -> Result<Vec<WorkingPeriods>, &'static str> {
+    let client = Client::new();
+    let response = client
+        .get(format!("http://127.0.0.1:7777/api/working_periods/{}", id))
+        .send()
+        .await
+        .unwrap();
+
+    match response.status() {
+        reqwest::StatusCode::OK => {
+            // on success, parse our JSON to an APIResponse
+            match response.json::<Vec<WorkingPeriods>>().await {
+                Ok(working_periods) => Ok(working_periods),
+                Err(_) => Err("The response didn't match the shape we expected."),
+            }
+        }
+        _ => Err("Something unexpected happened"),
+    }
+}
