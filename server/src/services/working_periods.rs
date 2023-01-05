@@ -4,7 +4,6 @@ use crate::database;
 use chrono::DateTime;
 use rocket::serde::json::Json;
 use rocket::serde::{Deserialize, Serialize};
-use rocket::tokio::sync::watch;
 
 use crate::services::watchers;
 

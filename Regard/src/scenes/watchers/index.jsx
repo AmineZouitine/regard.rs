@@ -7,7 +7,7 @@ import { useQuery } from "react-query";
 import { formatDate } from "./utils";
 import EditButton from "./EditButton";
 
-const Table = () => {
+const Watchers = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -108,4 +108,4 @@ const Table = () => {
   );
 };
 
-export default Table;
+export default Watchers;

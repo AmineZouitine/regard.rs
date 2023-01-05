@@ -5,8 +5,6 @@ import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import GridOnIcon from "@mui/icons-material/GridOn";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
@@ -36,7 +34,7 @@ const Sidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("Calendar");
+  const [selected, setSelected] = useState("Dashboard");
   console.log("Selected:", selected);
   return (
     <Box
@@ -114,6 +112,14 @@ const Sidebar = () => {
           )}
 
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+            <Item
+              title="Dashboard"
+              to="/"
+              icon={<HomeOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -123,7 +129,7 @@ const Sidebar = () => {
             </Typography>
             <Item
               title="Calendar"
-              to="/"
+              to="/calendar"
               icon={<CalendarTodayOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

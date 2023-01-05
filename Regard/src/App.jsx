@@ -3,10 +3,11 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
-import Table from "./scenes/table";
+import Watchers from "./scenes/watchers";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Routes, Route } from "react-router-dom";
 import Calendar from "./scenes/calendar";
+import Dashboard from "./scenes/dashboard";
 
 const queryClient = new QueryClient();
 function App() {
@@ -21,8 +22,9 @@ function App() {
               <main className="content">
                 <Topbar />
                 <Routes>
-                  <Route path={"/"} element={<Calendar />} />
-                  <Route path={"/watchers"} element={<Table />} />
+                  <Route path={"/"} element={<Dashboard />} />
+                  <Route path={"/calendar"} element={<Calendar />} />
+                  <Route path={"/watchers"} element={<Watchers />} />
                 </Routes>
               </main>
             </div>
