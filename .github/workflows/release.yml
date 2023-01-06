@@ -48,11 +48,6 @@ jobs:
         cp cli/target/release/cli release-${{ matrix.os }}/
         cp watcher/target/release/watcher release-${{ matrix.os }}/
         zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
-        echo ${{ needs.create_release.outputs.upload_url }}
-        echo ${{ needs.create_release.outputs }} | jq -R .
-        echo ${{ needs }} | jq -R .
-        echo ${{ needs.create_release.outputs }} | jq '@json'
-        echo ${{ needs }} | jq '@json'
     - name: Upload Binaries
       uses: actions/upload-release-asset@v1
       env:
