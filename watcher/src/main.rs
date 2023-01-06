@@ -49,7 +49,6 @@ async fn main() {
                 requests::new_working_periods(&watcher.name).await.unwrap();
             }
         }
-
         thread::sleep(Duration::from_secs(seconds));
     }
 }
