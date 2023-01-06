@@ -1,0 +1,47 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+    - uses: actions/checkout@v2
+    - uses: actions/setup-rust@v1
+      with:
+        rust-version: stable
+    - name: Build server
+      run: cargo build --manifest-path server/Cargo.toml --release
+    - name: Build cli
+      run: cargo build --manifest-path cli/Cargo.toml --release
+    - name: Build watcher
+      run: cargo build --manifest-path watcher/Cargo.toml --release
+    - name: Package Binaries
+      run: |
+        mkdir -p release-${{ matrix.os }}
+        cp server/target/release/server release-${{ matrix.os }}/
+        cp cli/target/release/cli release-${{ matrix.os }}/
+        cp watcher/target/release/watcher release-${{ matrix.os }}/
+        zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
+    - name: Upload Binaries
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: release-${{ matrix.os }}.zip
+        asset_name: release-${{ matrix.os }}.zip
+        asset_content_type: application/zip
