@@ -138,6 +138,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "cli"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "clap",
+ "colored",
+ "prettytable-rs",
+ "regex",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
 name = "codespan-reporting"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -903,21 +918,6 @@ dependencies = [
  "getrandom",
  "redox_syscall",
  "thiserror",
-]
-
-[[package]]
-name = "regard"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "clap",
- "colored",
- "prettytable-rs",
- "regex",
- "reqwest",
- "serde",
- "serde_json",
- "tokio",
 ]
 
 [[package]]

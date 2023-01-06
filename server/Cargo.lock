@@ -1253,6 +1253,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "server"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "lazy_static",
+ "rocket",
+ "rusqlite",
+ "serde",
+]
+
+[[package]]
 name = "sha2"
 version = "0.10.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1701,17 +1712,6 @@ name = "wasm-bindgen-shared"
 version = "0.2.83"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1c38c045535d93ec4f0b4defec448e4291638ee608530863b1e2ba115d4fff7f"
-
-[[package]]
-name = "watch"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "lazy_static",
- "rocket",
- "rusqlite",
- "serde",
-]
 
 [[package]]
 name = "winapi"

@@ -46,7 +46,7 @@ const Dashboard = () => {
   }
 
   return (
-    <Box m="20px" display={"flex"} flexDirection="column">
+    <Box m="20px" height={"65vh"}>
       <Box display="flex" justifyContent="space-between">
         <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
         <Box
@@ -133,27 +133,12 @@ const Dashboard = () => {
           </IconButton>
         </Box>
       </Box>
-      <Box
-        p="15px"
-        borderRadius="4px"
-        display="flex"
-        alignItems="center"
-        justifyContent={"center"}
-        alignSelf="center"
-        gap={"20px"}
-      >
-        <HoursInfo title={"Year"} value={"3"} />
-        <HoursInfo title={"Month"} value={"3"} />
-        <HoursInfo title={"Week"} value={"4"} />
-        <HoursInfo title={"Today"} value={"1"} />
-      </Box>
 
-      <Box display={"flex"} mt="20px">
+      <Box mt="20px" height={"90%"}>
         <Box
           ml="40px"
-          height="450px"
           mt="20px"
-          width={"95%"}
+          height={"100%"}
           borderRadius="10px"
           boxShadow={"2px 2px black"}
           bgcolor={colors.primary[400]}

@@ -141,27 +141,6 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Join us
-            </Typography>
-            <Item
-              title="Github"
-              to="/bar"
-              icon={<GitHubIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Discord"
-              to="/pie"
-              icon={<SupportAgentIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
           </Box>
         </Menu>
       </ProSidebar>
