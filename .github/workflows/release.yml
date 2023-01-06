@@ -23,15 +23,18 @@ jobs:
     - uses: actions/setup-rust@v1
       with:
         rust-version: stable
-    - name: Build rust_project1
-      run: cargo build --manifest-path rust_project1/Cargo.toml --release
-    - name: Build rust_project2
-      run: cargo build --manifest-path rust_project2/Cargo.toml --release
+    - name: Build server
+      run: cargo build --manifest-path server/Cargo.toml --release
+    - name: Build cli
+      run: cargo build --manifest-path cli/Cargo.toml --release
+    - name: Build watcher
+      run: cargo build --manifest-path watcher/Cargo.toml --release
     - name: Package Binaries
       run: |
         mkdir -p release-${{ matrix.os }}
-        cp rust_project1/target/release/rust_project1 release-${{ matrix.os }}/
-        cp rust_project2/target/release/rust_project2 release-${{ matrix.os }}/
+        cp server/target/release/server release-${{ matrix.os }}/
+        cp cli/target/release/cli release-${{ matrix.os }}/
+        cp watcher/target/release/watcher release-${{ matrix.os }}/
         zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
     - name: Upload Binaries
       uses: actions/upload-release-asset@v1
