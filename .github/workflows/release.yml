@@ -1,0 +1,44 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+    - uses: actions/checkout@v2
+    - uses: actions/setup-rust@v1
+      with:
+        rust-version: stable
+    - name: Build rust_project1
+      run: cargo build --manifest-path rust_project1/Cargo.toml --release
+    - name: Build rust_project2
+      run: cargo build --manifest-path rust_project2/Cargo.toml --release
+    - name: Package Binaries
+      run: |
+        mkdir -p release-${{ matrix.os }}
+        cp rust_project1/target/release/rust_project1 release-${{ matrix.os }}/
+        cp rust_project2/target/release/rust_project2 release-${{ matrix.os }}/
+        zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
+    - name: Upload Binaries
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: release-${{ matrix.os }}.zip
+        asset_name: release-${{ matrix.os }}.zip
+        asset_content_type: application/zip
