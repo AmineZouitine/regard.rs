@@ -213,6 +213,7 @@ export function getMonthDateString(offset) {
 }
 
 export function convertData(data) {
+  console.log(data);
   // Create an empty result array
   const result = [];
   // Get the keys for the data object
