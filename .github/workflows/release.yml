@@ -29,6 +29,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
+      - name: Install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-20.04'
+        run: |
+          sudo apt-get update
+          sudo apt install libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
       - name: Checkout
         uses: actions/checkout@v1
       - name: Install rust
@@ -38,6 +43,12 @@ jobs:
           profile: minimal
           override: true
           target: ${{ matrix.target }}
+      - name: Build tauri
+        run: |
+          cd Regard
+          npm install
+          npm run build
+          cargo tauri build
       - name: Build server
         run: cargo build --manifest-path server/Cargo.toml --release
       - name: Build cli
@@ -49,6 +60,7 @@ jobs:
           mkdir -p release-${{ matrix.os }}
           cp server/target/release/server release-${{ matrix.os }}/
           cp cli/target/release/cli release-${{ matrix.os }}/
+          cp Regard/src-tauri/target/release/regard release-${{ matrix.os }}/
           cp watcher/target/release/watcher release-${{ matrix.os }}/
           zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
       - name: Upload Binaries
