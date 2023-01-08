@@ -5,22 +5,22 @@ on:
     tags:
       - "*"
 
-
 jobs:
   create_release:
+    name: Create_Release
     runs-on: ubuntu-latest
-    steps:
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
     outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-
+      upload_url: ${{ steps.step_upload_url.outputs.upload_url }}
+    steps:
+      - id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+      - id: step_upload_url
+        run: echo "::set-output name=upload_url::${{ steps.create_release.outputs.upload_url }}"
 
   build:
     needs: create_release
@@ -29,34 +29,34 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-    - name: Install rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        profile: minimal
-        override: true
-        target: ${{ matrix.target }}
-    - name: Build server
-      run: cargo build --manifest-path server/Cargo.toml --release
-    - name: Build cli
-      run: cargo build --manifest-path cli/Cargo.toml --release
-    - name: Build watcher
-      run: cargo build --manifest-path watcher/Cargo.toml --release
-    - name: Package Binaries
-      run: |
-        mkdir -p release-${{ matrix.os }}
-        cp server/target/release/server release-${{ matrix.os }}/
-        cp cli/target/release/cli release-${{ matrix.os }}/
-        cp watcher/target/release/watcher release-${{ matrix.os }}/
-        zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
-    - name: Upload Binaries
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: release-${{ matrix.os }}.zip
-        asset_name: release-${{ matrix.os }}.zip
-        asset_content_type: application/zip
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+          target: ${{ matrix.target }}
+      - name: Build server
+        run: cargo build --manifest-path server/Cargo.toml --release
+      - name: Build cli
+        run: cargo build --manifest-path cli/Cargo.toml --release
+      - name: Build watcher
+        run: cargo build --manifest-path watcher/Cargo.toml --release
+      - name: Package Binaries
+        run: |
+          mkdir -p release-${{ matrix.os }}
+          cp server/target/release/server release-${{ matrix.os }}/
+          cp cli/target/release/cli release-${{ matrix.os }}/
+          cp watcher/target/release/watcher release-${{ matrix.os }}/
+          zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
+      - name: Upload Binaries
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.Create_Release.outputs.upload_url }}
+          asset_path: release-${{ matrix.os }}.zip
+          asset_name: release-${{ matrix.os }}.zip
+          asset_content_type: application/zip
