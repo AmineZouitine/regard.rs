@@ -47,6 +47,7 @@ jobs:
       - name: Build tauri
         run: |
           cargo install create-tauri-app
+          cargo install tauri-cli
           cd Regard
           npm install
           npm run build
