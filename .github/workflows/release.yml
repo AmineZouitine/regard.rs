@@ -5,9 +5,25 @@ on:
     tags:
       - "*"
 
+
 jobs:
-  # First job: build and package binaries
-  build_and_package:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+
+
+  build:
+    needs: create_release
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -35,32 +51,12 @@ jobs:
         cp cli/target/release/cli release-${{ matrix.os }}/
         cp watcher/target/release/watcher release-${{ matrix.os }}/
         zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
-    - name: Set Outputs
-      id: set_outputs
-      run: echo ::set-output name=os::${{ matrix.os }}
-      
-  # Second job: create release and upload assets
-  create_release_and_upload:
-    runs-on: ubuntu-latest
-    needs: build_and_package
-    steps:
-    - name: Get os
-      id: get_os
-      run: echo "os = ${{ steps.build_and_package.outputs.os }}"
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
     - name: Upload Binaries
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: release-${{ steps.get_os.outputs.os }}.zip
-        asset_name: release-${{ steps.get_os.outputs.outputs.os }}.zipg
+        asset_path: release-${{ matrix.os }}.zip
+        asset_name: release-${{ matrix.os }}.zip
         asset_content_type: application/zip
