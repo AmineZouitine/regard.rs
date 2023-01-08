@@ -45,6 +45,7 @@ jobs:
           override: true
           target: ${{ matrix.target }}
       - name: Build tauri
+        if: matrix.os == 'ubuntu-20.04'
         run: |
           cargo install create-tauri-app
           cargo install tauri-cli
