@@ -46,6 +46,7 @@ jobs:
           target: ${{ matrix.target }}
       - name: Build tauri
         run: |
+          cargo install create-tauri-app
           cd Regard
           npm install
           npm run build
