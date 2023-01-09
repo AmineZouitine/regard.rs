@@ -27,8 +27,9 @@ jobs:
     needs: create_release
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 1
       matrix:
-        os: [ubuntu-20.04, windows-latest, x86_64-apple-darwin, aarch64-apple-darwin]
+        os: [ubuntu-20.04, windows-latest, macos-latest]
     steps:      
       - name: Checkout
         uses: actions/checkout@v1
@@ -40,30 +41,17 @@ jobs:
           override: true
           target: ${{ matrix.target }}
       - name: Build server
-        run: |
-          export CARGO_TARGET_DIR=build-${{ matrix.os }}
-          cargo build --manifest-path server/Cargo.toml --release
+        run: cargo build --manifest-path server/Cargo.toml --release
       - name: Build cli
-        run: |
-          export CARGO_TARGET_DIR=build-${{ matrix.os }}
-          cargo build --manifest-path cli/Cargo.toml --release
+        run: cargo build --manifest-path cli/Cargo.toml --release
       - name: Build watcher
-        run: |
-          export CARGO_TARGET_DIR=build-${{ matrix.os }}
-          cargo build --manifest-path watcher/Cargo.toml --release
-
-      - name: debug
-        run: |
-          ls
-          echo -----------------------------------------
-          ls build-${{ matrix.os }}
-
+        run: cargo build --manifest-path watcher/Cargo.toml --release
       - name: Package Binaries
         run: |
           mkdir -p release-${{ matrix.os }}
-          cp -r build-${{ matrix.os }}/server release-${{ matrix.os }}/
-          cp -r build-${{ matrix.os }}/cli release-${{ matrix.os }}/
-          cp -r build-${{ matrix.os }}/release release-${{ matrix.os }}/
+          cp server/target/release/server release-${{ matrix.os }}/
+          cp cli/target/release/cli release-${{ matrix.os }}/
+          cp watcher/target/release/watcher release-${{ matrix.os }}/
           zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
