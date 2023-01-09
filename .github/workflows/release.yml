@@ -26,21 +26,30 @@ jobs:
     name: create_tauri_app
     runs-on: ubuntu-latest
     steps:
-     - name: Install dependencies
-       run: |
-         sudo apt-get update
-         sudo apt install libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
-     - name: Build tauri
-       run: |
-         cd $GITHUB_WORKSPACE/Regard
-         cargo install create-tauri-app
-         cargo install tauri-cli
-         npm install
-         npm run build
-         cargo tauri build
-     - name: Output executable
-       run: |
-         cp Regard/src-tauri/target/release/regard output/regard
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+          target: ${{ matrix.target }}
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt install libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
+      - name: Build tauri
+        run: |
+          cd Regard
+          cargo install create-tauri-app
+          cargo install tauri-cli
+          npm install
+          npm run build
+          cargo tauri build
+      - name: Output executable
+        run: |
+          cp Regard/src-tauri/target/release/regard output/regard
 
 
   
