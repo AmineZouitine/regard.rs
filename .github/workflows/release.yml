@@ -55,7 +55,7 @@ jobs:
           cp server/target/release/server release-${{ matrix.os }}/
           cp cli/target/release/cli release-${{ matrix.os }}/
           cp watcher/target/release/watcher release-${{ matrix.os }}/
-          zip -r release-${{ matrix.os }}-${{ matrix.alt}}.zip release-${{ matrix.os }}/
+          zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
         env:
