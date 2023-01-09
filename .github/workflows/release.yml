@@ -54,7 +54,7 @@ jobs:
 
       - name: Package Binaries
         run: |
-          mkdir -p release-${{ matrix.os }}
+          mkdir -p -r release-${{ matrix.os }}
           cp build-${{ matrix.os }} release-${{ matrix.os }}/
           cp build-${{ matrix.os }} release-${{ matrix.os }}/
           cp build-${{ matrix.os }} release-${{ matrix.os }}/
