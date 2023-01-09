@@ -41,30 +41,29 @@ jobs:
           target: ${{ matrix.target }}
       - name: Build server
         run: |
-          export CARGO_TARGET_DIR=build-${{ matrix.os }}/server
+          export CARGO_TARGET_DIR=build-${{ matrix.os }}
           cargo build --manifest-path server/Cargo.toml --release
       - name: Build cli
         run: |
-          export CARGO_TARGET_DIR=build-${{ matrix.os }}/cli
+          export CARGO_TARGET_DIR=build-${{ matrix.os }}
           cargo build --manifest-path cli/Cargo.toml --release
       - name: Build watcher
         run: |
-          export CARGO_TARGET_DIR=build-${{ matrix.os }}/watcher
+          export CARGO_TARGET_DIR=build-${{ matrix.os }}
           cargo build --manifest-path watcher/Cargo.toml --release
 
       - name: debug
         run: |
           ls
-          ls server
-          ls cli
-          ls watcher
+          echo -----------------------------------------
+          ls build-${{ matrix.os }}
 
       - name: Package Binaries
         run: |
           mkdir -p release-${{ matrix.os }}
-          cp -r build-${{ matrix.os }}/server/server release-${{ matrix.os }}/
-          cp -r build-${{ matrix.os }}/cli/cli release-${{ matrix.os }}/
-          cp -r build-${{ matrix.os }}/release/release release-${{ matrix.os }}/
+          cp -r build-${{ matrix.os }}/server release-${{ matrix.os }}/
+          cp -r build-${{ matrix.os }}/cli release-${{ matrix.os }}/
+          cp -r build-${{ matrix.os }}/release release-${{ matrix.os }}/
           zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
