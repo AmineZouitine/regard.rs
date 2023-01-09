@@ -40,11 +40,17 @@ jobs:
           override: true
           target: ${{ matrix.target }}
       - name: Build server
-        run: cargo build --manifest-path server/Cargo.toml --release --out-dir build-${{ matrix.os }}/server
+        run: |
+          export CARGO_TARGET_DIR=build-${{ matrix.os }}/server
+          cargo build --manifest-path server/Cargo.toml --release
       - name: Build cli
-        run: cargo build --manifest-path cli/Cargo.toml --release --out-dir build-${{ matrix.os }}/cli
+        run: |
+          export CARGO_TARGET_DIR=build-${{ matrix.os }}/cli
+          cargo build --manifest-path cli/Cargo.toml --release
       - name: Build watcher
-        run: cargo build --manifest-path watcher/Cargo.toml --release --out-dir build-${{ matrix.os }}/watcher
+        run: |
+          export CARGO_TARGET_DIR=build-${{ matrix.os }}/watcher
+          cargo build --manifest-path watcher/Cargo.toml --release
 
       - name: Package Binaries
         run: |
