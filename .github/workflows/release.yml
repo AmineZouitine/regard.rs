@@ -47,13 +47,6 @@ jobs:
           npm install
           npm run build
           cargo tauri build
-      - name: Output executable
-        run: |
-          cp Regard/src-tauri/target/release/regard output/regard
-
-
-  
-    
 
   build:
     needs: [create_release, create_tauri_app]
@@ -81,9 +74,9 @@ jobs:
         run: |
           mkdir -p release-${{ matrix.os }}
           cp server/target/release/server release-${{ matrix.os }}/
-          cp server/target/release/cli release-${{ matrix.os }}/
+          cp cli/target/release/cli release-${{ matrix.os }}/
           cp watcher/target/release/watcher release-${{ matrix.os }}/
-          cp output/regard release-${{ matrix.os }}/
+          cp Regard/src-tauri/target/release/regard release-${{ matrix.os }}/
           zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
