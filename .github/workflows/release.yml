@@ -24,7 +24,7 @@ jobs:
         run: echo "::set-output name=upload_url::${{ steps.create_release.outputs.upload_url }}"
 
   build:
-    needs: [create_release, create_tauri_app]
+    needs: create_release
     runs-on: ubuntu-latest
     strategy:
       matrix:
