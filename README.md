@@ -8,6 +8,7 @@ The graphical user interface (GUI) allows you to view your work times with preci
 ## 👨🏽‍💻 Installation
 
 
+## ⚡ Quick start
 ### 📊 GUI 
 
 ### ⌨️ CLI
