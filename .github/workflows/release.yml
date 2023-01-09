@@ -32,9 +32,10 @@ jobs:
          sudo apt install libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
      - name: Build tauri
        run: |
+         ls
+         cd Regard
          cargo install create-tauri-app
          cargo install tauri-cli
-         cd Regard
          npm install
          npm run build
          cargo tauri build
