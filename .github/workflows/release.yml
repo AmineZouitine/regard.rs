@@ -29,24 +29,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        arch: [main, alt]
-        alt: [aarch64, arm64]
-        include:
-          - os: ubuntu-latest
-            platform: linux
-          - os: windows-latest
-            ls: dir
-          - os: ubuntu-latest
-            arch: alt
-            alt_arch_name: aarch64
-          - os: macos-latest
-            arch: alt
-            alt_arch_name: arm64
-        exclude:
-          - os: windows-latest
-            arch: alt
-          - os: macos-latest
-            arch: alt
     steps:      
       - name: Checkout
         uses: actions/checkout@v1
@@ -69,17 +51,17 @@ jobs:
         run: cargo build --manifest-path watcher/Cargo.toml --release
       - name: Package Binaries
         run: |
-          mkdir -p release-${{ matrix.os }}-${{ matrix.alt}}
-          cp server/target/release/server release-${{ matrix.os }}-${{ matrix.alt}}/
-          cp cli/target/release/cli release-${{ matrix.os }}-${{ matrix.alt}}/
-          cp watcher/target/release/watcher release-${{ matrix.os }}-${{ matrix.alt}}/
-          zip -r release-${{ matrix.os }}-${{ matrix.alt}}.zip release-${{ matrix.os }}-${{ matrix.alt}}/
+          mkdir -p release-${{ matrix.os }}
+          cp server/target/release/server release-${{ matrix.os }}/
+          cp cli/target/release/cli release-${{ matrix.os }}/
+          cp watcher/target/release/watcher release-${{ matrix.os }}/
+          zip -r release-${{ matrix.os }}-${{ matrix.alt}}.zip release-${{ matrix.os }}/
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.Create_Release.outputs.upload_url }}
-          asset_path: release-${{ matrix.os }}-${{ matrix.alt}}.zip
-          asset_name: release-${{ matrix.os }}-${{ matrix.alt}}.zip
+          asset_path: release-${{ matrix.os }}.zip
+          asset_name: release-${{ matrix.os }}.zip
           asset_content_type: application/zip
