@@ -52,12 +52,19 @@ jobs:
           export CARGO_TARGET_DIR=build-${{ matrix.os }}/watcher
           cargo build --manifest-path watcher/Cargo.toml --release
 
+      - name: debug
+        run: |
+          ls
+          ls server
+          ls cli
+          ls watcher
+
       - name: Package Binaries
         run: |
           mkdir -p release-${{ matrix.os }}
-          cp -r build-${{ matrix.os }}/server release-${{ matrix.os }}/
-          cp -r build-${{ matrix.os }}/cli release-${{ matrix.os }}/
-          cp -r build-${{ matrix.os }}/release release-${{ matrix.os }}/
+          cp -r build-${{ matrix.os }}/server/server release-${{ matrix.os }}/
+          cp -r build-${{ matrix.os }}/cli/cli release-${{ matrix.os }}/
+          cp -r build-${{ matrix.os }}/release/release release-${{ matrix.os }}/
           zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
