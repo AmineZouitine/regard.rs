@@ -23,12 +23,29 @@ jobs:
       - id: step_upload_url
         run: echo "::set-output name=upload_url::${{ steps.create_release.outputs.upload_url }}"
 
-  build:
+  build_binaries:
     needs: create_release
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, windows-latest, x86_64-apple-darwin, aarch64-apple-darwin]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        arch: [main, alt]
+        include:
+          - os: ubuntu-latest
+            platform: linux
+          - os: windows-latest
+            ls: dir
+          - os: ubuntu-latest
+            arch: alt
+            alt_arch_name: aarch64
+          - os: macos-latest
+            arch: alt
+            alt_arch_name: arm64
+        exclude:
+          - os: windows-latest
+            arch: alt
+          - os: macos-latest
+            arch: alt
     steps:      
       - name: Checkout
         uses: actions/checkout@v1
@@ -39,6 +56,10 @@ jobs:
           profile: minimal
           override: true
           target: ${{ matrix.target }}
+
+      - run: rustup target add aarch64-apple-darwin
+        if: matrix.os == 'macos-latest'
+
       - name: Build server
         run: cargo build --manifest-path server/Cargo.toml --release
       - name: Build cli
