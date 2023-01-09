@@ -13,6 +13,9 @@ jobs:
       matrix:
         platform: [macos-latest, ubuntu-20.04, windows-latest]
     runs-on: ${{ matrix.platform }}
+    defaults:
+      run:
+        working-directory: "Regard"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -32,7 +35,7 @@ jobs:
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
-          workspaces: 'Regard/src-tauri -> target'
+          workspaces: './src-tauri -> target'
 
       - name: Sync node version and setup cache
         uses: actions/setup-node@v3
