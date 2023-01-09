@@ -30,6 +30,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         arch: [main, alt]
+        alt: [aarch64, arm64]
         include:
           - os: ubuntu-latest
             platform: linux
@@ -72,13 +73,13 @@ jobs:
           cp server/target/release/server release-${{ matrix.os }}-${{ matrix.alt}}/
           cp cli/target/release/cli release-${{ matrix.os }}-${{ matrix.alt}}/
           cp watcher/target/release/watcher release-${{ matrix.os }}-${{ matrix.alt}}/
-          zip -r release-${{ matrix.os }}-${{ matrix.alt}}.zip release-${{ matrix.os }}-${{ matrix.alt}}
+          zip -r release-${{ matrix.os }}-${{ matrix.alt}}.zip release-${{ matrix.os }}-${{ matrix.alt}}/
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.Create_Release.outputs.upload_url }}
-          asset_path: release-${{ matrix.os }}-${{ matrix.alt}}.zip
-          asset_name: release-${{ matrix.os }}-${{ matrix.alt}}.zip
+          asset_path: release-${{ matrix.os }}.zip
+          asset_name: release-${{ matrix.os }}.zip
           asset_content_type: application/zip
