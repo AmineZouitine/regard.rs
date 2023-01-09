@@ -1,4 +1,4 @@
-name: Release
+name: Build_Tauri
 on:
   push:
     tags:
@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           paths: Regard
+          working-directory: Regard
 
       - name: Install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-20.04'
@@ -41,7 +42,7 @@ jobs:
 
       - name: Install app dependencies and build web
         # Remove `&& yarn build` if you build your frontend in `beforeBuildCommand`
-        run: npm install && yarn build # Change this to npm, yarn or pnpm.
+        run: npm install && npm build # Change this to npm, yarn or pnpm.
 
       - name: Build the app
         uses: tauri-apps/tauri-action@v0
