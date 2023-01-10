@@ -112,7 +112,8 @@ jobs:
           cp server/target/release/server release-linux-${{ matrix.os }}/
           cp cli/target/release/cli release-linux-${{ matrix.os }}/
           cp watcher/target/release/watcher release-linux-${{ matrix.os }}/
-          cp ${{matrix.os}} release-linux-${{matrix.os}}/
+          cp appimage release-linux-${{matrix.os}}/
+          cp deb release-linux-${{matrix.os}}/
           zip -r release-linux-${{ matrix.os }}.zip release-linux-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
@@ -164,7 +165,7 @@ jobs:
           mkdir -p release-macos-${{ matrix.os }}
           cp server/target/release/server release-macos-${{ matrix.os }}/
           cp cli/target/release/cli release-macos-${{ matrix.os }}/
-          cp ${{matrix.os}} release-macos-${{ matrix.os }}/
+          cp dmg release-macos-${{ matrix.os }}/
           cp watcher/target/release/watcher release-macos-${{ matrix.os }}/
           zip -r release-macos-${{ matrix.os }}.zip release-macos-${{ matrix.os }}
       - name: Upload Binaries
@@ -213,7 +214,7 @@ jobs:
           mkdir -p release-windows-${{ matrix.os }}
           cp server/target/release/server release-windows-${{ matrix.os }}/
           cp cli/target/release/cli release-windows-${{ matrix.os }}/
-          cp ${{matrix.os}} release-windows-${{ matrix.os }}/
+          cp regard_0.1.0_x64_en-US.msi release-windows-${{ matrix.os }}/
           cp watcher/target/release/watcher release-windows-${{ matrix.os }}/
           zip -r release-windows-${{ matrix.os }}.zip release-windows-${{ matrix.os }}
       - name: Upload Binaries
