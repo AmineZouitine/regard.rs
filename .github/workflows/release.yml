@@ -66,11 +66,11 @@ jobs:
         id: build-app
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Debug
+        run: echo ${{ steps.build-app.outputs.artifactPaths }}
       - name: Deploy to GitHub releases
         id: upload-artifact
         uses: actions/upload-artifact@v2
-        env:
-          ARTIFACT_NAME: ${{ matrix.platform }}
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: ${{ steps.build-app.outputs.artifactPaths }}
