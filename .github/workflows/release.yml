@@ -70,12 +70,12 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
             name: ${{matrix.platform}}
-            path: ${{ fromJSON(steps.build.outputs.artifactPaths)[0] }}
+            path: ${{ fromJSON(steps.build-app.outputs.artifactPaths)[0] }}
       - name: Debug
         run: |
-            echo ${{ fromJSON(steps.build.outputs.artifactPaths)[0] }}
-            echo ${{ fromJSON(steps.build.outputs.artifactPaths)[1] }}
-            echo ${{ fromJSON(steps.build.outputs.artifactPaths)[2] }}
+            echo ${{ fromJSON(steps.build-app.outputs.artifactPaths)[0] }}
+            echo ${{ fromJSON(steps.build-app.outputs.artifactPaths)[1] }}
+            echo ${{ fromJSON(steps.build-app.outputs.artifactPaths)[2] }}
 
   Linux:
     needs: [create_release, Tauri]
