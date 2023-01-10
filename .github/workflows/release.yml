@@ -103,7 +103,6 @@ jobs:
         with:
           name: ${{ matrix.os }}
           path: ./
-      
       - name: Debug
         run: |
           ls
@@ -151,6 +150,9 @@ jobs:
         with:
           name: ${{ matrix.os }}
           path: ./
+      - name: Debug
+        run: |
+          ls
       - name: Build server
         run: cargo build --manifest-path server/Cargo.toml --release
       - name: Build cli
@@ -197,7 +199,9 @@ jobs:
         with:
           name: ${{ matrix.os }}
           path: ./
-
+      - name: Debug
+        run: |
+          ls
       - name: Build server
         run: cargo build --manifest-path server/Cargo.toml --release
       - name: Build cli

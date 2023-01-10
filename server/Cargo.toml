@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 rocket = { version = "0.5.0-rc.2", features = ["json"] }
-rusqlite = "0.28.0"
+rusqlite = { version = "0.28.0", features = ["bundled"] }
 lazy_static = "1.4.0"
 serde = "1.0.151"
 chrono = "0.4.23"
