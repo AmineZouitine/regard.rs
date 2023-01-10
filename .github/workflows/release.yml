@@ -5,7 +5,6 @@ on:
     tags:
       - "*"
 
-
 jobs:
   create_release:
     name: Create_Release
@@ -23,12 +22,103 @@ jobs:
       - id: step_upload_url
         run: echo "::set-output name=upload_url::${{ steps.create_release.outputs.upload_url }}"
 
-  build_binaries:
-    needs: create_release
+  Tauri:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, ubuntu-20.04]
+    runs-on: ${{ matrix.platform }}
+    defaults:
+      run:
+        working-directory: "Regard"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-20.04'
+        # You can remove libayatana-appindicator3-dev if you don't use the system tray feature.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libayatana-appindicator3-dev librsvg2-dev
+
+      
+      - name: Rust setup
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+      
+      - name: ls
+        run: ls
+
+      - name: Sync node version and setup cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+          cache: 'npm' # Set this to npm, yarn or pnpm.
+          cache-dependency-path: Regard/package-lock.json
+
+      - name: Install app dependencies and build web
+        run: npm install && npm run build # Change this to npm, yarn or pnpm.
+
+      - name: Build the app
+        uses: tauri-apps/tauri-action@v0
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: ls2
+        run: ls
+
+  Linux:
+    needs: [create_release_Linux, Tauri]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
+    steps:      
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+          target: ${{ matrix.target }}
+
+      - name: Build server
+        run: cargo build --manifest-path server/Cargo.toml --release
+      - name: Build cli
+        run: cargo build --manifest-path cli/Cargo.toml --release
+      - name: Build watcher
+        run: cargo build --manifest-path watcher/Cargo.toml --release
+      - name: Package Binaries
+        run: |
+          mkdir -p release-linux-${{ matrix.os }}
+          cp server/target/release/server release-linux-${{ matrix.os }}/
+          cp cli/target/release/cli release-linux-${{ matrix.os }}/
+          cp watcher/target/release/watcher release-linux-${{ matrix.os }}/
+          zip -r release-${{ matrix.os }}.zip release-linux-${{ matrix.os }}
+      - name: Upload Binaries
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.Create_Release.outputs.upload_url }}
+          asset_path: release-linux-${{ matrix.os }}.zip
+          asset_name: release-linux-${{ matrix.os }}.zip
+          asset_content_type: application/zip
+
+
+  MacOS:
+    needs: [create_release_Linux, Tauri]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [x86_64-apple-darwin, aarch64-apple-darwin]
     steps:      
       - name: Checkout
         uses: actions/checkout@v1
@@ -51,17 +141,60 @@ jobs:
         run: cargo build --manifest-path watcher/Cargo.toml --release
       - name: Package Binaries
         run: |
-          mkdir -p release-${{ matrix.os }}
-          cp server/target/release/server release-${{ matrix.os }}/
-          cp cli/target/release/cli release-${{ matrix.os }}/
-          cp watcher/target/release/watcher release-${{ matrix.os }}/
-          zip -r release-${{ matrix.os }}.zip release-${{ matrix.os }}
+          mkdir -p release-macos-${{ matrix.os }}
+          cp server/target/release/server release-macos-${{ matrix.os }}/
+          cp cli/target/release/cli release-macos-${{ matrix.os }}/
+          cp watcher/target/release/watcher release-macos-${{ matrix.os }}/
+          zip -r release-${{ matrix.os }}.zip release-macos-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.Create_Release.outputs.upload_url }}
-          asset_path: release-${{ matrix.os }}.zip
-          asset_name: release-${{ matrix.os }}.zip
+          asset_path: release-macos-${{ matrix.os }}.zip
+          asset_name: release-macos-${{ matrix.os }}.zip
+          asset_content_type: application/zip
+
+  Windows:
+    needs: [create_release_Linux, Tauri]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+    steps:      
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+          target: ${{ matrix.target }}
+
+      - run: rustup target add aarch64-apple-darwin
+        if: matrix.os == 'macos-latest'
+
+      - name: Build server
+        run: cargo build --manifest-path server/Cargo.toml --release
+      - name: Build cli
+        run: cargo build --manifest-path cli/Cargo.toml --release
+      - name: Build watcher
+        run: cargo build --manifest-path watcher/Cargo.toml --release
+      - name: Package Binaries
+        run: |
+          mkdir -p release-windows-${{ matrix.os }}
+          cp server/target/release/server release-windows-${{ matrix.os }}/
+          cp cli/target/release/cli release-windows-${{ matrix.os }}/
+          cp watcher/target/release/watcher release-windows-${{ matrix.os }}/
+          zip -r release-${{ matrix.os }}.zip release-windows-${{ matrix.os }}
+      - name: Upload Binaries
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.Create_Release.outputs.upload_url }}
+          asset_path: release-windows-${{ matrix.os }}.zip
+          asset_name: release-windows-${{ matrix.os }}.zip
           asset_content_type: application/zip
