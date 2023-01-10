@@ -26,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [macos-latest, ubuntu-latest]
+        platform: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.platform }}
     defaults:
       run:
@@ -70,12 +70,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
             name: ${{matrix.platform}}
-            path: ${{ fromJSON(steps.build-app.outputs.artifactPaths)[0] }}
+            path: |
+              ${{ fromJSON(steps.build-app.outputs.artifactPaths)[0] }}
+              ${{ fromJSON(steps.build-app.outputs.artifactPaths)[1] }}
       - name: Debug
         run: |
             echo ${{ fromJSON(steps.build-app.outputs.artifactPaths)[0] }}
             echo ${{ fromJSON(steps.build-app.outputs.artifactPaths)[1] }}
-            echo ${{ fromJSON(steps.build-app.outputs.artifactPaths)[2] }}
 
   Linux:
     needs: [create_release, Tauri]
@@ -133,7 +134,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [x86_64-apple-darwin, aarch64-apple-darwin]
+        os: [macos-latest]
     steps:      
       - name: Checkout
         uses: actions/checkout@v1
