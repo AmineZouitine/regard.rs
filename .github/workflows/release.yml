@@ -73,7 +73,7 @@ jobs:
         run: ls
 
   Linux:
-    needs: [create_release_Linux, Tauri]
+    needs: [create_release, Tauri]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -114,7 +114,7 @@ jobs:
 
 
   MacOS:
-    needs: [create_release_Linux, Tauri]
+    needs: [create_release, Tauri]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -157,7 +157,7 @@ jobs:
           asset_content_type: application/zip
 
   Windows:
-    needs: [create_release_Linux, Tauri]
+    needs: [create_release, Tauri]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
