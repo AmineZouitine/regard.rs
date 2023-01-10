@@ -26,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [macos-latest, ubuntu-20.04, windows-latest]
+        platform: [macos-latest, ubuntu-20.04]
     runs-on: ${{ matrix.platform }}
     defaults:
       run:
@@ -62,20 +62,20 @@ jobs:
         run: npm install && npm run build # Change this to npm, yarn or pnpm.
 
       - name: Build the app
-        uses: tauri-apps/tauri-action@v0
+        uses: tauri-apps/tauri-action@dev
         id: build-app
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Debug
-        run: echo ${{ steps.build-app.outputs.artifactPaths }}
-      - name: Deploy to GitHub releases
-        id: upload-artifact
-        uses: actions/upload-artifact@v2
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.ARTIFACT_NAME }}
-          path: ${{ steps.build-app.outputs.artifactPaths }}
-
-
+            name: ${{matrix.platform}}
+            path: ${{ fromJSON(steps.build.outputs.artifactPaths)[0] }}
+      - name: Debug
+        run: |
+            echo ${{ fromJSON(steps.build.outputs.artifactPaths)[0] }}
+            echo ${{ fromJSON(steps.build.outputs.artifactPaths)[1] }}
+            echo ${{ fromJSON(steps.build.outputs.artifactPaths)[2] }}
 
   Linux:
     needs: [create_release, Tauri]
@@ -100,6 +100,16 @@ jobs:
         run: cargo build --manifest-path cli/Cargo.toml --release
       - name: Build watcher
         run: cargo build --manifest-path watcher/Cargo.toml --release
+      
+      - name: Download a single artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.os }}
+          path: ./
+      
+      - name: Debug
+        run: |
+          ls
       - name: Package Binaries
         run: |
           mkdir -p release-linux-${{ matrix.os }}
