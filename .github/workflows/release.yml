@@ -70,7 +70,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: ls2
-        run: ls
+        run: |
+          ls
+          echo "--------------------------------------"
+          ls dist
+          echo "--------------------------------------"
+          tree dist
+          echo "--------------------------------------"
 
   Linux:
     needs: [create_release, Tauri]
@@ -101,7 +107,7 @@ jobs:
           cp server/target/release/server release-linux-${{ matrix.os }}/
           cp cli/target/release/cli release-linux-${{ matrix.os }}/
           cp watcher/target/release/watcher release-linux-${{ matrix.os }}/
-          zip -r release-${{ matrix.os }}.zip release-linux-${{ matrix.os }}
+          zip -r release-linux-${{ matrix.os }}.zip release-linux-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
         env:
@@ -145,7 +151,7 @@ jobs:
           cp server/target/release/server release-macos-${{ matrix.os }}/
           cp cli/target/release/cli release-macos-${{ matrix.os }}/
           cp watcher/target/release/watcher release-macos-${{ matrix.os }}/
-          zip -r release-${{ matrix.os }}.zip release-macos-${{ matrix.os }}
+          zip -r release-macos-${{ matrix.os }}.zip release-macos-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
         env:
@@ -188,7 +194,7 @@ jobs:
           cp server/target/release/server release-windows-${{ matrix.os }}/
           cp cli/target/release/cli release-windows-${{ matrix.os }}/
           cp watcher/target/release/watcher release-windows-${{ matrix.os }}/
-          zip -r release-${{ matrix.os }}.zip release-windows-${{ matrix.os }}
+          zip -r release-windows-${{ matrix.os }}.zip release-windows-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
         env:
