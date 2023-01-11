@@ -115,10 +115,11 @@ jobs:
         run: |
           mkdir -p release-linux-${{ matrix.os }}
           cp server/target/release/server release-linux-${{ matrix.os }}/
-          cp cli/target/release/cli release-linux-${{ matrix.os }}/
+          cp cli/target/release/regard release-linux-${{ matrix.os }}/
           cp watcher/target/release/watcher release-linux-${{ matrix.os }}/
           cp regard.AppImage release-linux-${{matrix.os}}/
           cp regard.deb release-linux-${{matrix.os}}/
+          cp install-linux.sh release-linux-${{matrix.os}}/
           zip -r release-linux-${{ matrix.os }}.zip release-linux-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
@@ -174,9 +175,10 @@ jobs:
         run: |
           mkdir -p release-macos-${{ matrix.os }}
           cp server/target/release/server release-macos-${{ matrix.os }}/
-          cp cli/target/release/cli release-macos-${{ matrix.os }}/
+          cp cli/target/release/regard release-macos-${{ matrix.os }}/
           cp  regard.dmg release-macos-${{ matrix.os }}/
           cp watcher/target/release/watcher release-macos-${{ matrix.os }}/
+          cp install-macos.sh release-macos-${{matrix.os}}/
           zip -r release-macos-${{ matrix.os }}.zip release-macos-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
@@ -227,9 +229,10 @@ jobs:
         run: |
           mkdir -p release-windows-${{ matrix.os }}
           cp server/target/release/server.exe release-windows-${{ matrix.os }}/
-          cp cli/target/release/cli.exe release-windows-${{ matrix.os }}/
+          cp cli/target/release/regard.exe release-windows-${{ matrix.os }}/
           cp watcher/target/release/watcher.exe release-windows-${{ matrix.os }}/
           cp  regard.msi release-windows-${{ matrix.os }}/
+          cp install-windows.sh release-windows-${{matrix.os}}/
           Compress-Archive -Path release-windows-${{ matrix.os }} -DestinationPath release-windows-${{ matrix.os }}.zip
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
