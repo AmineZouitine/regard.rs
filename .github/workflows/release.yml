@@ -103,6 +103,11 @@ jobs:
         with:
           name: ${{ matrix.os }}
           path: ./
+      - name: Rename
+        run: |
+          mv deb/*.deb regard.deb
+          mv appimage/*.AppImage regard.AppImage
+
       - name: Debug
         run: |
           ls
@@ -112,8 +117,8 @@ jobs:
           cp server/target/release/server release-linux-${{ matrix.os }}/
           cp cli/target/release/cli release-linux-${{ matrix.os }}/
           cp watcher/target/release/watcher release-linux-${{ matrix.os }}/
-          cp -r appimage release-linux-${{matrix.os}}/
-          cp -r deb release-linux-${{matrix.os}}/
+          cp regard.AppImage release-linux-${{matrix.os}}/
+          cp regard.deb release-linux-${{matrix.os}}/
           zip -r release-linux-${{ matrix.os }}.zip release-linux-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
@@ -151,7 +156,12 @@ jobs:
         with:
           name: ${{ matrix.os }}
           path: ./
+
+      - name: Rename
+        run: |
+          mv dmg/*.dmg regard.dmg
       - name: Debug
+
         run: |
           ls
       - name: Build server
@@ -165,7 +175,7 @@ jobs:
           mkdir -p release-macos-${{ matrix.os }}
           cp server/target/release/server release-macos-${{ matrix.os }}/
           cp cli/target/release/cli release-macos-${{ matrix.os }}/
-          cp -r dmg release-macos-${{ matrix.os }}/
+          cp  regard.dmg release-macos-${{ matrix.os }}/
           cp watcher/target/release/watcher release-macos-${{ matrix.os }}/
           zip -r release-macos-${{ matrix.os }}.zip release-macos-${{ matrix.os }}
       - name: Upload Binaries
@@ -206,6 +216,10 @@ jobs:
         run: cargo build --manifest-path cli/Cargo.toml --release
       - name: Build watcher
         run: cargo build --manifest-path watcher/Cargo.toml --release
+      
+      - name: Rename
+        run: |
+          mv *.msi regard.msi
       - name: Debug
         run: |
           ls server/target/release
@@ -215,7 +229,7 @@ jobs:
           cp server/target/release/server.exe release-windows-${{ matrix.os }}/
           cp cli/target/release/cli.exe release-windows-${{ matrix.os }}/
           cp watcher/target/release/watcher.exe release-windows-${{ matrix.os }}/
-          cp -r regard_0.1.0_x64_en-US.msi release-windows-${{ matrix.os }}/
+          cp  regard.msi release-windows-${{ matrix.os }}/
           Compress-Archive -Path release-windows-${{ matrix.os }} -DestinationPath release-windows-${{ matrix.os }}.zip
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
