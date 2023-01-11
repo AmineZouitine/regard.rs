@@ -13,8 +13,8 @@ mv regard.dmg openGUI.sh uninstall.sh watcher server ~/.regard_config
 nohup ~/.regard_config/server &
 nohup ~/.regard_config/watcher 120 &
 
-mv *.db ~/.regard_config/
-mv *.out ~/nohup.out
+mv watch.db ~/.regard_config/
+mv nohup.out ~/.regard_config/nohup.out
 
 echo 'nohup ~/.regard_config/server & nohup ~/.regard_config/watcher 120' >>~/.bash_profile
 

@@ -67,19 +67,15 @@ async fn main() {
         }
         Commands::ResetAll => requests::reset_all().await,
         Commands::Display => {
-            Command::new("nohup")
-                .arg("sh")
-                .arg("~/.regard_config/openGUI.sh")
-                .arg("&")
-                .output()
+            Command::new("sh")
+                .arg("openGUI.sh")
+                .spawn()
                 .expect("Error: Cannot open GUI, open an issue please.");
         }
         Commands::Uninstall => {
-            Command::new("nohup")
-                .arg("sh")
+            Command::new("sh")
                 .arg("~/.regard_config/uninstall.sh")
-                .arg("&")
-                .output()
+                .spawn()
                 .expect("Error: Error during the unistallation, open an issue please.");
         }
     };

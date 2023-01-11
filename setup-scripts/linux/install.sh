@@ -16,11 +16,10 @@ mv regardGUI uninstall.sh openGUI.sh regard.deb watcher server ~/.regard_config
 nohup ~/.regard_config/server &
 nohup ~/.regard_config/watcher 120 &
 
-mv *.db ~/.regard_config/
-mv *.out ~/nohup.out
+mv watch.db ~/.regard_config/
+mv nohup.out ~/.regard_config/
 
 (
     crontab -l 2>/dev/null
     echo "@reboot nohup ~/.regard_config/server & nohup ~/.regard_config/watcher 120"
 ) | crontab -
-
