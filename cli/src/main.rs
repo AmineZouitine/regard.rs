@@ -2,6 +2,7 @@ pub mod arguments_manager;
 pub mod requests;
 pub mod utils;
 pub mod verification;
+use std::process::Command;
 
 use verification::{get_absolute_path, valid_name, valid_path};
 
@@ -65,6 +66,15 @@ async fn main() {
             }
         }
         Commands::ResetAll => requests::reset_all().await,
-        Commands::Display => {}
+        Commands::Display => {
+            Command::new("~/.regard_config/openGUI.sh")
+                .output()
+                .expect("Error: Cannot open GUI, open an issue please.");
+        }
+        Commands::Unistall => {
+            Command::new("~/.regard_config/unistall.sh")
+                .output()
+                .expect("Error: Error during the unistallation, open an issue please.");
+        }
     };
 }
