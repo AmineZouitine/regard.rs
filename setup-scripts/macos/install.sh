@@ -10,10 +10,11 @@ mkdir ~/.regard_config
 chmod +x openGUI.sh
 mv regard.dmg openGUI.sh uninstall.sh watcher server ~/.regard_config
 
-cd ~/.regard_config
+nohup ~/.regard_config/server &
+nohup ~/.regard_config/watcher 120 &
 
-nohup server &
-nohup watcher 120 &
+cp *.db ~/.regard_config/
+cp *.out ~/nohup.out
 
 echo 'nohup ~/.regard_config/server & nohup ~/.regard_config/watcher 120' >>~/.bash_profile
 

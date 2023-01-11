@@ -13,13 +13,14 @@ chmod +x regardGUI
 
 mv regardGUI uninstall.sh openGUI.sh regard.deb watcher server ~/.regard_config
 
-cd ~/.regard_config
-nohup server &
-nohup watcher 120 &
+nohup ~/.regard_config/server &
+nohup ~/.regard_config/watcher 120 &
+
+cp *.db ~/.regard_config/
+cp *.out ~/nohup.out
 
 (
     crontab -l 2>/dev/null
     echo "@reboot nohup ~/.regard_config/server & nohup ~/.regard_config/watcher 120"
 ) | crontab -
 
-rm install.sh
