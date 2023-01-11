@@ -6,7 +6,7 @@ The graphical user interface (GUI) allows you to view your work times with preci
 
 
 ## 👨🏽‍💻 Installation
- - Install the zip corresponding to your distribution <a href='https://github.com/AmineZouitine/regard.rs/releases'>here</a>.
+ - Install the zip corresponding to your distribution <a href='https://github.com/AmineZouitine/regard.rs/releases' target="_blank">here</a>.
  
  - After unzipping it, use this command in the folder (replace the "YOUR-DISTRIBUTION" with the correct name) :
 ```sh
