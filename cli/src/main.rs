@@ -68,7 +68,7 @@ async fn main() {
         Commands::ResetAll => requests::reset_all().await,
         Commands::Display => {
             Command::new("sh")
-                .arg("openGUI.sh")
+                .arg("~/.regard_config/openGUI.sh")
                 .spawn()
                 .expect("Error: Cannot open GUI, open an issue please.");
         }

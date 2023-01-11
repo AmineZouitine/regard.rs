@@ -13,6 +13,8 @@ mv regard.dmg openGUI.sh uninstall.sh watcher server ~/.regard_config
 nohup ~/.regard_config/server &
 nohup ~/.regard_config/watcher 120 &
 
+sleep 2
+
 mv watch.db ~/.regard_config/
 mv nohup.out ~/.regard_config/nohup.out
 
