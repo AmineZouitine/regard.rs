@@ -26,7 +26,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [macos-latest, ubuntu-latest, windows-latest]
+        # platform: [macos-latest, ubuntu-latest, windows-latest]
+        platform: [windows-latest]
     runs-on: ${{ matrix.platform }}
     defaults:
       run:
@@ -74,109 +75,109 @@ jobs:
               ${{ fromJSON(steps.build-app.outputs.artifactPaths)[0] }}
               ${{ fromJSON(steps.build-app.outputs.artifactPaths)[1] }}
 
-  Linux:
-    needs: [create_release, Tauri]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-    steps:      
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Install rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-          target: ${{ matrix.target }}
+  # Linux:
+  #   needs: [create_release, Tauri]
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest]
+  #   steps:      
+  #     - name: Checkout
+  #       uses: actions/checkout@v1
+  #     - name: Install rust
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: stable
+  #         profile: minimal
+  #         override: true
+  #         target: ${{ matrix.target }}
 
-      - name: Build server
-        run: cargo build --manifest-path server/Cargo.toml --release
-      - name: Build cli
-        run: cargo build --manifest-path cli/Cargo.toml --release
-      - name: Build watcher
-        run: cargo build --manifest-path watcher/Cargo.toml --release
+  #     - name: Build server
+  #       run: cargo build --manifest-path server/Cargo.toml --release
+  #     - name: Build cli
+  #       run: cargo build --manifest-path cli/Cargo.toml --release
+  #     - name: Build watcher
+  #       run: cargo build --manifest-path watcher/Cargo.toml --release
       
-      - name: Download a single artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ matrix.os }}
-          path: ./
-      - name: Debug
-        run: |
-          ls
-      - name: Package Binaries
-        run: |
-          mkdir -p release-linux-${{ matrix.os }}
-          cp server/target/release/server release-linux-${{ matrix.os }}/
-          cp cli/target/release/cli release-linux-${{ matrix.os }}/
-          cp watcher/target/release/watcher release-linux-${{ matrix.os }}/
-          cp -r appimage release-linux-${{matrix.os}}/
-          cp -r deb release-linux-${{matrix.os}}/
-          zip -r release-linux-${{ matrix.os }}.zip release-linux-${{ matrix.os }}
-      - name: Upload Binaries
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.Create_Release.outputs.upload_url }}
-          asset_path: release-linux-${{ matrix.os }}.zip
-          asset_name: release-linux-${{ matrix.os }}.zip
-          asset_content_type: application/zip
+  #     - name: Download a single artifact
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: ${{ matrix.os }}
+  #         path: ./
+  #     - name: Debug
+  #       run: |
+  #         ls
+  #     - name: Package Binaries
+  #       run: |
+  #         mkdir -p release-linux-${{ matrix.os }}
+  #         cp server/target/release/server release-linux-${{ matrix.os }}/
+  #         cp cli/target/release/cli release-linux-${{ matrix.os }}/
+  #         cp watcher/target/release/watcher release-linux-${{ matrix.os }}/
+  #         cp -r appimage release-linux-${{matrix.os}}/
+  #         cp -r deb release-linux-${{matrix.os}}/
+  #         zip -r release-linux-${{ matrix.os }}.zip release-linux-${{ matrix.os }}
+  #     - name: Upload Binaries
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ needs.Create_Release.outputs.upload_url }}
+  #         asset_path: release-linux-${{ matrix.os }}.zip
+  #         asset_name: release-linux-${{ matrix.os }}.zip
+  #         asset_content_type: application/zip
 
 
-  MacOS:
-    needs: [create_release, Tauri]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest]
-    steps:      
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Install rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-          target: ${{ matrix.target }}
+  # MacOS:
+  #   needs: [create_release, Tauri]
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix:
+  #       os: [macos-latest]
+  #   steps:      
+  #     - name: Checkout
+  #       uses: actions/checkout@v1
+  #     - name: Install rust
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: stable
+  #         profile: minimal
+  #         override: true
+  #         target: ${{ matrix.target }}
 
-      - run: rustup target add aarch64-apple-darwin
-        if: matrix.os == 'macos-latest'
+  #     - run: rustup target add aarch64-apple-darwin
+  #       if: matrix.os == 'macos-latest'
 
-      - name: Download a single artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ matrix.os }}
-          path: ./
-      - name: Debug
-        run: |
-          ls
-      - name: Build server
-        run: cargo build --manifest-path server/Cargo.toml --release
-      - name: Build cli
-        run: cargo build --manifest-path cli/Cargo.toml --release
-      - name: Build watcher
-        run: cargo build --manifest-path watcher/Cargo.toml --release
-      - name: Package Binaries
-        run: |
-          mkdir -p release-macos-${{ matrix.os }}
-          cp server/target/release/server release-macos-${{ matrix.os }}/
-          cp cli/target/release/cli release-macos-${{ matrix.os }}/
-          cp -r dmg release-macos-${{ matrix.os }}/
-          cp watcher/target/release/watcher release-macos-${{ matrix.os }}/
-          zip -r release-macos-${{ matrix.os }}.zip release-macos-${{ matrix.os }}
-      - name: Upload Binaries
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.Create_Release.outputs.upload_url }}
-          asset_path: release-macos-${{ matrix.os }}.zip
-          asset_name: release-macos-${{ matrix.os }}.zip
-          asset_content_type: application/zip
+  #     - name: Download a single artifact
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: ${{ matrix.os }}
+  #         path: ./
+  #     - name: Debug
+  #       run: |
+  #         ls
+  #     - name: Build server
+  #       run: cargo build --manifest-path server/Cargo.toml --release
+  #     - name: Build cli
+  #       run: cargo build --manifest-path cli/Cargo.toml --release
+  #     - name: Build watcher
+  #       run: cargo build --manifest-path watcher/Cargo.toml --release
+  #     - name: Package Binaries
+  #       run: |
+  #         mkdir -p release-macos-${{ matrix.os }}
+  #         cp server/target/release/server release-macos-${{ matrix.os }}/
+  #         cp cli/target/release/cli release-macos-${{ matrix.os }}/
+  #         cp -r dmg release-macos-${{ matrix.os }}/
+  #         cp watcher/target/release/watcher release-macos-${{ matrix.os }}/
+  #         zip -r release-macos-${{ matrix.os }}.zip release-macos-${{ matrix.os }}
+  #     - name: Upload Binaries
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ needs.Create_Release.outputs.upload_url }}
+  #         asset_path: release-macos-${{ matrix.os }}.zip
+  #         asset_name: release-macos-${{ matrix.os }}.zip
+  #         asset_content_type: application/zip
 
   Windows:
     needs: [create_release, Tauri]
@@ -216,12 +217,13 @@ jobs:
           cp cli/target/release/cli.exe release-windows-${{ matrix.os }}/
           cp watcher/target/release/watcher.exe release-windows-${{ matrix.os }}/
           cp -r regard_0.1.0_x64_en-US.msi release-windows-${{ matrix.os }}/
+          Compress-Archive -Path release-windows-${{ matrix.os }} -DestinationPath release-windows-${{ matrix.os }}.zip
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.Create_Release.outputs.upload_url }}
-          asset_path: release-windows-${{ matrix.os }}
-          asset_name: release-windows-${{ matrix.os }}
+          asset_path: release-windows-${{ matrix.os }}.zip
+          asset_name: release-windows-${{ matrix.os }}.zip
           asset_content_type: application/zip
