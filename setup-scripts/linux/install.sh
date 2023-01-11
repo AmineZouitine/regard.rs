@@ -8,16 +8,17 @@ sudo mv regard /usr/local/bin
 mkdir ~/.regard_config
 
 mv regard.AppImage regardGUI
-mv regardGUI regard.deb watcher server ~/.regard_config
-
+chmod +x openGUI.sh
 chmod +x regardGUI
 
-~/.regard_config/server &
-~/.regard_config/watcher 120
+mv regardGUI openGUI.sh regard.deb watcher server ~/.regard_config
+
+nohup ~/.regard_config/server &
+nohup ~/.regard_config/watcher 120 &
 
 (
     crontab -l 2>/dev/null
-    echo "@reboot ~/.regard_config/server & ~/.regard_config/watcher 120"
+    echo "@reboot nohup ~/.regard_config/server & nohup ~/.regard_config/watcher 120"
 ) | crontab -
 
 rm install.sh
