@@ -6,6 +6,8 @@ mkdir ~/.regard_config
 
 mv regard.AppImage regard.deb watcher server ~/.regard_config
 
+./server && ./watcher 120
+
 (
     crontab -l 2>/dev/null
     echo "@reboot ~/.regard_config/server & ~/.regard_config/watcher 120"
