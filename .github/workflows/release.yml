@@ -113,7 +113,7 @@ jobs:
           cp cli/target/release/cli release-linux-${{ matrix.os }}/
           cp watcher/target/release/watcher release-linux-${{ matrix.os }}/
           cp -r appimage release-linux-${{matrix.os}}/
-          cp deb release-linux-${{matrix.os}}/
+          cp -r deb release-linux-${{matrix.os}}/
           zip -r release-linux-${{ matrix.os }}.zip release-linux-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
@@ -200,19 +200,19 @@ jobs:
         with:
           name: ${{ matrix.os }}
           path: ./
-      - name: Debug
-        run: |
-          ls
       - name: Build server
         run: cargo build --manifest-path server/Cargo.toml --release
       - name: Build cli
         run: cargo build --manifest-path cli/Cargo.toml --release
       - name: Build watcher
         run: cargo build --manifest-path watcher/Cargo.toml --release
+      - name: Debug
+        run: |
+          ls server/target/release
       - name: Package Binaries
         run: |
           mkdir -p release-windows-${{ matrix.os }}
-          cp server/target/release/server release-windows-${{ matrix.os }}/
+          cp server/target/release/server.exe release-windows-${{ matrix.os }}/
           cp cli/target/release/cli release-windows-${{ matrix.os }}/
           cp -r regard_0.1.0_x64_en-US.msi release-windows-${{ matrix.os }}/
           cp watcher/target/release/watcher release-windows-${{ matrix.os }}/
