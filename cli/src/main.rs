@@ -67,12 +67,14 @@ async fn main() {
         }
         Commands::ResetAll => requests::reset_all().await,
         Commands::Display => {
-            Command::new("~/.regard_config/openGUI.sh")
+            Command::new("sh")
+                .arg("~/.regard_config/openGUI.sh")
                 .output()
                 .expect("Error: Cannot open GUI, open an issue please.");
         }
-        Commands::Unistall => {
-            Command::new("~/.regard_config/unistall.sh")
+        Commands::Uninstall => {
+            Command::new("sh")
+                .arg("~/.regard_config/unistall.sh")
                 .output()
                 .expect("Error: Error during the unistallation, open an issue please.");
         }

@@ -11,10 +11,11 @@ mv regard.AppImage regardGUI
 chmod +x openGUI.sh
 chmod +x regardGUI
 
-mv regardGUI openGUI.sh regard.deb watcher server ~/.regard_config
+mv regardGUI uninstall.sh openGUI.sh regard.deb watcher server ~/.regard_config
 
-nohup ~/.regard_config/server &
-nohup ~/.regard_config/watcher 120 &
+cd ~/.regard_config
+nohup server &
+nohup watcher 120 &
 
 (
     crontab -l 2>/dev/null

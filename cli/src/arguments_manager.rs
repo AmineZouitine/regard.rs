@@ -42,5 +42,5 @@ pub enum Commands {
     Display,
 
     /// Unistall regard
-    Unistall,
+    Uninstall,
 }
