@@ -17,7 +17,9 @@ The graphical user interface (GUI) allows you to view your work times with preci
 ### 📊 GUI 
 
 ### ⌨️ CLI
+The CLI is the configuration area for your **watchers**. Here, you can create, display, rename, and manage them as you please. Remember to run **regard --help** for additional options and information.
 
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/53370597/212031532-83a99f14-a9b3-471c-b62e-54c2a1187aa9.gif)
 
 ## 🫵 Contribution
 
