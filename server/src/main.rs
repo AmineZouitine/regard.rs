@@ -49,7 +49,7 @@ fn rocket() -> _ {
     let mut args: Vec<String> = env::args().collect();
 
     if args.len() == 1 {
-        args.push("7777".to_string());
+        args.push("50011".to_string());
     }
 
     let port_str = &args[1];
