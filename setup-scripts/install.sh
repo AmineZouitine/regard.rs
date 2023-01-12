@@ -23,8 +23,8 @@ elif [ "${unameOut}" == "Darwin" ]; then
     mv regard.dmg openGUI.sh uninstall.sh watcher server ~/.regard_config
 fi
 
-nohup ~/.regard_config/server &>/dev/null &
-nohup ~/.regard_config/watcher 120 &>/dev/null &
+sudo nohup ~/.regard_config/server &>/dev/null &
+sudo nohup ~/.regard_config/watcher 120 &>/dev/null &
 
 sleep 2
 
