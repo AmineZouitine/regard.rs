@@ -6,6 +6,7 @@ use serde_json::json;
 
 use crate::utils::{display_watchers, server_off, Watcher};
 
+// This code handles all interactions with the local database, each user argument triggers one of these functions (with the exception of display and uninstall).
 enum Method {
     Get,
     Delete,

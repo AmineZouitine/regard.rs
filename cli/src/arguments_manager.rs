@@ -1,5 +1,7 @@
 use clap::Parser;
 
+// This code is responsible for managing the user's arguments, all arguments are sub-commands with sometimes parameters.
+
 #[derive(Parser)]
 #[clap(author = "Amine Zouitine", version, about)]
 pub struct ArgumentsManager {
