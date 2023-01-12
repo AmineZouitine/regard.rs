@@ -8,7 +8,7 @@ import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
-import Logo from "../../asset/vite.svg";
+import Logo from "../../asset/regard.png";
 import { Link } from "react-router-dom";
 import PreviewIcon from "@mui/icons-material/Preview";
 
@@ -86,24 +86,25 @@ const Sidebar = () => {
 
           {!isCollapsed && (
             <Box ml="-30px" mb="25px">
-              <Box display="flex" justifyContent="center" alignItems="center">
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              ></Box>
+              <Box
+                textAlign="center"
+                display={"flex"}
+                flexDirection="column"
+                gap="10px"
+                alignItems={"center"}
+                justifyContent="center"
+              >
                 <img
                   alt="profile-user"
-                  width="100px"
-                  height="100px"
+                  width={"70%"}
                   src={Logo}
-                  style={{ cursor: "pointer", borderRadius: "50%" }}
+                  style={{ cursor: "pointer" }}
                 />
-              </Box>
-              <Box textAlign="center">
-                <Typography
-                  variant="h2"
-                  color={colors.grey[100]}
-                  fontWeight="bold"
-                  sx={{ m: "10px 0 0 0" }}
-                >
-                  Regard
-                </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
                   Time tracker
                 </Typography>

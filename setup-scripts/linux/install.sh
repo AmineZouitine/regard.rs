@@ -16,7 +16,6 @@ mv regardGUI uninstall.sh openGUI.sh regard.deb watcher server ~/.regard_config
 nohup ~/.regard_config/server &
 nohup ~/.regard_config/watcher 120 &
 
-
 sleep 2
 
 mv watch.db ~/.regard_config/
