@@ -119,7 +119,7 @@ jobs:
           cp watcher/target/release/watcher release-linux-${{ matrix.os }}/
           cp regard.AppImage release-linux-${{matrix.os}}/
           cp regard.deb release-linux-${{matrix.os}}/
-          cp setup-scripts/linux/install.sh setup-scripts/linux/openGUI.sh setup-scripts/linux/uninstall.sh release-linux-${{ matrix.os }}/
+          cp setup-scripts/install.sh setup-scripts/openGUI.sh setup-scripts/uninstall.sh release-linux-${{ matrix.os }}/
           zip -r release-linux-${{ matrix.os }}.zip release-linux-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
@@ -178,7 +178,7 @@ jobs:
           cp cli/target/release/regard release-macos-${{ matrix.os }}/
           cp  regard.dmg release-macos-${{ matrix.os }}/
           cp watcher/target/release/watcher release-macos-${{ matrix.os }}/
-          cp setup-scripts/macos/install.sh setup-scripts/macos/openGUI.sh setup-scripts/macos/uninstall.sh release-macos-${{matrix.os}}/
+          cp setup-scripts/install.sh setup-scripts/openGUI.sh setup-scripts/uninstall.sh release-macos-${{matrix.os}}/
           zip -r release-macos-${{ matrix.os }}.zip release-macos-${{ matrix.os }}
       - name: Upload Binaries
         uses: actions/upload-release-asset@v1
