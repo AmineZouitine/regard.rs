@@ -24,4 +24,4 @@ The CLI is the configuration area for your **watchers**. Here, you can create, d
 
 ## 🫵 Contribution
 
-You can find all the information in the file [**CONTRIBUTING.md**](./CONTRIBUTING.md). Hoping to see you soon in my pull request 😊
+Hoping to see you soon in my pull request 😊
