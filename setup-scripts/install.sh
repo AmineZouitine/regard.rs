@@ -1,10 +1,12 @@
 #!/bin/bash
 
+chmod +x uninstall.sh
+./uninstall.sh false
+
 echo -e "\033[32mInstallation starting !.\033[0m"
 unameOut="$(uname -s)"
 
 sudo mv regard /usr/local/bin
-
 mkdir ~/.regard_config
 
 if [ "${unameOut}" == "Linux" ]; then
