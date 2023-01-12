@@ -2,6 +2,7 @@ pub mod arguments_manager;
 pub mod requests;
 pub mod utils;
 pub mod verification;
+use std::env;
 use std::process::Command;
 
 use verification::{get_absolute_path, valid_name, valid_path};
@@ -13,6 +14,7 @@ use clap::Parser;
 #[tokio::main]
 async fn main() {
     let arguments_manager = ArgumentsManager::parse();
+    let home_dir = env::var("HOME").unwrap();
 
     match &arguments_manager.command {
         Commands::Add {
@@ -68,13 +70,13 @@ async fn main() {
         Commands::ResetAll => requests::reset_all().await,
         Commands::Display => {
             Command::new("sh")
-                .arg("~/.regard_config/openGUI.sh")
+                .arg(format!("{}/.regard_config/openGUI.sh", home_dir))
                 .spawn()
                 .expect("Error: Cannot open GUI, open an issue please.");
         }
         Commands::Uninstall => {
             Command::new("sh")
-                .arg("~/.regard_config/uninstall.sh")
+                .arg(format!("{}/.regard_config/uninstall.sh", home_dir))
                 .spawn()
                 .expect("Error: Error during the unistallation, open an issue please.");
         }
