@@ -6,13 +6,14 @@ The graphical user interface (GUI) allows you to view your work times with preci
 
 
 ## 🔨 The project is still in alpha phase, there may be a lot of bugs 🔨
-## 👨🏽‍💻 Installation
+## 👨🏽‍💻 Installation Linux and Macos (Windows incoming)
  - Install the zip corresponding to your distribution <a href='https://github.com/AmineZouitine/regard.rs/releases' target="_blank">here</a>.
  
  - After unzipping it, use this command in the folder:
 ```sh
 ./install.sh
 ```
+
 
 ## ⚡ Quick start
 ### 📊 GUI 
