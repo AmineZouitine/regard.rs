@@ -5,6 +5,7 @@ Regard is a self-hosted tool that allows you to track the amount of time you spe
 The graphical user interface (GUI) allows you to view your work times with precision, using graphs or a calendar, and also allows you to basic manage your watchers (enabling or disabling them).
 
 
+## 🔨 The project is still in alpha phase, there may be a lot of bugs 🔨
 ## 👨🏽‍💻 Installation
  - Install the zip corresponding to your distribution <a href='https://github.com/AmineZouitine/regard.rs/releases' target="_blank">here</a>.
  
