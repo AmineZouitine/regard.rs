@@ -13,10 +13,11 @@ chmod +x regardGUI
 
 mv regardGUI uninstall.sh openGUI.sh regard.deb watcher server ~/.regard_config
 
-sleep 2
-
 nohup ~/.regard_config/server &
 nohup ~/.regard_config/watcher 120 &
+
+
+sleep 2
 
 mv watch.db ~/.regard_config/
 mv nohup.out ~/.regard_config/
