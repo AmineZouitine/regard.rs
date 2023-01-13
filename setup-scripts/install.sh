@@ -14,21 +14,23 @@ if [ "${unameOut}" == "Linux" ]; then
     chmod +x regardGUI
 fi
 
-chmod +x openGUI.sh
-chmod a+w server
-
 if [ "${unameOut}" == "Linux" ]; then
     mv regardGUI uninstall.sh openGUI.sh regard.deb watcher server ~/.regard_config
 elif [ "${unameOut}" == "Darwin" ]; then
     mv regard.dmg openGUI.sh uninstall.sh watcher server ~/.regard_config
 fi
 
-sudo nohup ~/.regard_config/server &>/dev/null &
-sudo nohup ~/.regard_config/watcher 120 &>/dev/null &
+chmod a+x ~/.regard_config/server
+chmod a+x ~/.regard_config/watcher
+
+chmod a+w ~/.regard_config/server
+chmod a+w ~/.regard_config/watcher
+
+nohup ~/.regard_config/server &>/dev/null &
+nohup ~/.regard_config/watcher 120 &>/dev/null &
 
 sleep 2
 
-chmod a+w watch.db
 mv watch.db ~/.regard_config/
 
 (
