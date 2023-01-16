@@ -22,7 +22,15 @@ Just do this command in your terminal
 ```
 
 ## ⚡ Quick start
+
+
+
 ### 📊 GUI 
+Run the command **regard display** to open the GUI, allowing you to view your work hours and perform basic actions on your **watchers**
+
+![lJ6RI7V60I](https://user-images.githubusercontent.com/53370597/212719034-9eb6035d-ce07-4a7f-b45f-e6dc48ff101d.gif)
+
+
 
 ### ⌨️ CLI
 The CLI is the configuration area for your **watchers**. Here, you can create, display, rename, and manage them as you please. Remember to run **regard --help** for additional options and information.
