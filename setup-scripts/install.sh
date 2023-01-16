@@ -22,8 +22,6 @@ fi
 
 sleep 2
 
-mv watch.db ~/.regard_config/
-
 (
     crontab -l 2>/dev/null
     echo "@reboot nohup ~/.regard_config/server &> /dev/null  & nohup ~/.regard_config/watcher 120 &> /dev/null"
