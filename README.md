@@ -1,6 +1,6 @@
 # 👀 regard.rs
 
-Regard is a self-hosted tool that allows you to track the amount of time you spend working on specific projects without any input from you. It consists of a command line interface (CLI) that allows you to manage your "watchers" (which are responsible for tracking whether you are working on a specific project). The CLI allows you to create, delete, or disable watchers, as well as check their status.
+**Regard** is a **self-hosted** tool that allows you to **track the amount of time** you spend working on specific projects without any input from you. It consists of a command line interface (CLI) that allows you to manage your **watchers** (which are responsible for tracking whether you are working on a specific project). The CLI allows you to create, delete, or disable watchers, as well as check their status.
 
 The graphical user interface (GUI) allows you to view your work times with precision, using graphs or a calendar, and also allows you to basic manage your watchers (enabling or disabling them).
 
