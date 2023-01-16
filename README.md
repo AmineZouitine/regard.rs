@@ -28,7 +28,8 @@ Just do this command in your terminal
 ### 📊 GUI 
 Run the command **regard display** to open the GUI, allowing you to view your work hours and perform basic actions on your **watchers**
 
-![lJ6RI7V60I](https://user-images.githubusercontent.com/53370597/212719034-9eb6035d-ce07-4a7f-b45f-e6dc48ff101d.gif)
+![7mPg0y94Fm](https://user-images.githubusercontent.com/53370597/212724322-e7aba295-d1fd-40ce-bd0a-39f7ecb6c254.gif)
+
 
 
 
