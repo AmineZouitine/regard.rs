@@ -20,15 +20,6 @@ elif [ "${unameOut}" == "Darwin" ]; then
     mv regard.dmg openGUI.sh uninstall.sh watcher server ~/.regard_config
 fi
 
-chmod a+x ~/.regard_config/server
-chmod a+x ~/.regard_config/watcher
-
-chmod a+w ~/.regard_config/server
-chmod a+w ~/.regard_config/watcher
-
-nohup ~/.regard_config/server &>/dev/null &
-nohup ~/.regard_config/watcher 120 &>/dev/null &
-
 sleep 2
 
 mv watch.db ~/.regard_config/
@@ -38,4 +29,4 @@ mv watch.db ~/.regard_config/
     echo "@reboot nohup ~/.regard_config/server &> /dev/null  & nohup ~/.regard_config/watcher 120 &> /dev/null"
 ) | crontab -
 
-echo -e "\033[32mInstallation done ! Now you can use the 'regard' command.\033[0m"
+echo -e "\033[32mInstallation done ! Reboot to finish the installation.\033[0m"

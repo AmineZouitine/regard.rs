@@ -74,11 +74,5 @@ async fn main() {
                 .spawn()
                 .expect("Error: Cannot open GUI, open an issue please.");
         }
-        Commands::Uninstall => {
-            Command::new("sh")
-                .arg(format!("{}/.regard_config/uninstall.sh", home_dir))
-                .spawn()
-                .expect("Error: Error during the unistallation, open an issue please.");
-        }
     };
 }

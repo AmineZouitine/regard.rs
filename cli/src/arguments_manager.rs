@@ -42,7 +42,4 @@ pub enum Commands {
     ResetAll,
     /// Open a desktop application and display information about each watchers
     Display,
-
-    /// Unistall regard
-    Uninstall,
 }
