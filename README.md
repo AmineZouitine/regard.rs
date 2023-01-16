@@ -14,6 +14,12 @@ The graphical user interface (GUI) allows you to view your work times with preci
 ./install.sh
 ```
 
+## 👋 Uninstall
+
+Just do this command in your terminal 
+```sh
+~/.regard_config/uninstall.sh
+```
 
 ## ⚡ Quick start
 ### 📊 GUI 
