@@ -3,6 +3,8 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 
+const PORT: u32 = 50011;
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Watchers {
     pub id: Option<i64>,
@@ -21,7 +23,7 @@ pub struct WorkingPeriods {
 pub async fn get_active_watchers() -> Result<Vec<Watchers>, &'static str> {
     let client = Client::new();
     let response = client
-        .get("http://127.0.0.1:7777/api/watchers/active")
+        .get(format!("http://127.0.0.1:{}/api/watchers/active", PORT))
         .send()
         .await
         .unwrap();
@@ -43,8 +45,8 @@ pub async fn make_watcher_inactive(watcher_name: &str) -> Result<(), &'static st
     let client = Client::new();
     client
         .patch(format!(
-            "http://127.0.0.1:7777/api/watchers/{}",
-            watcher_name
+            "http://127.0.0.1:{}/api/watchers/{}",
+            PORT, watcher_name
         ))
         .header("Content-Type", "application/json")
         .body(body.to_string())
@@ -61,8 +63,8 @@ pub async fn new_working_periods(watcher_name: &str) -> Result<(), &'static str>
     let client = Client::new();
     client
         .post(format!(
-            "http://127.0.0.1:7777/api/working_periods/{}",
-            watcher_name
+            "http://127.0.0.1:{}/api/working_periods/{}",
+            PORT, watcher_name
         ))
         .header("Content-Type", "application/json")
         .body(body.to_string())
@@ -75,7 +77,10 @@ pub async fn new_working_periods(watcher_name: &str) -> Result<(), &'static str>
 pub async fn get_working_periods(id: i64) -> Result<Vec<WorkingPeriods>, &'static str> {
     let client = Client::new();
     let response = client
-        .get(format!("http://127.0.0.1:7777/api/working_periods/{}", id))
+        .get(format!(
+            "http://127.0.0.1:{}/api/working_periods/{}",
+            PORT, id
+        ))
         .send()
         .await
         .unwrap();
