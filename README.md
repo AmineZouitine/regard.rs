@@ -1,12 +1,12 @@
 # 👀 regard.rs
 
-Regard is a self-hosted tool that allows you to track the amount of time you spend working on specific projects without any input from you. It consists of a command line interface (CLI) that allows you to manage your "watchers" (which are responsible for tracking whether you are working on a specific project). The CLI allows you to create, delete, or disable watchers, as well as check their status.
+**Regard** is a **self-hosted** tool that allows you to **track the amount of time** you spend working on specific projects without any input from you. It consists of a command line interface (CLI) that allows you to manage your **watchers** (which are responsible for tracking whether you are working on a specific project). The CLI allows you to create, delete, or disable watchers, as well as check their status.
 
 The graphical user interface (GUI) allows you to view your work times with precision, using graphs or a calendar, and also allows you to basic manage your watchers (enabling or disabling them).
 
 
 ## 🔨 The project is still in alpha phase, there may be a lot of bugs 🔨
-## 👨🏽‍💻 Installation Linux and Macos (Windows incoming)
+## 👨🏽‍💻 Installation Linux (Macos/Windows incoming)
  - Install the zip corresponding to your distribution <a href='https://github.com/AmineZouitine/regard.rs/releases' target="_blank">here</a>.
  
  - After unzipping it, use this command in the folder:
@@ -22,7 +22,16 @@ Just do this command in your terminal
 ```
 
 ## ⚡ Quick start
+
+
+
 ### 📊 GUI 
+Run the command **regard display** to open the GUI, allowing you to view your work hours and perform basic actions on your **watchers**
+
+![7mPg0y94Fm](https://user-images.githubusercontent.com/53370597/212724322-e7aba295-d1fd-40ce-bd0a-39f7ecb6c254.gif)
+
+
+
 
 ### ⌨️ CLI
 The CLI is the configuration area for your **watchers**. Here, you can create, display, rename, and manage them as you please. Remember to run **regard --help** for additional options and information.
