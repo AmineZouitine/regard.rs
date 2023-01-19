@@ -105,7 +105,7 @@ pub fn get_by_watcher_id_working_periods_time(
                 .signed_duration_since(last_period_date)
                 .num_seconds();
 
-            if time_difference <= 600 && period_date.date_naive() == last_period_date.date_naive() {
+            if time_difference <= 200 && period_date.date_naive() == last_period_date.date_naive() {
                 // If the difference in time is less than 2 minutes and the working periods are on the same day, add the working period to the current session
                 current_session.push(period);
             } else {
@@ -145,7 +145,7 @@ fn calculate_total_time(start_date: &String, end_date: &String) -> i64 {
     let start_date_time = DateTime::parse_from_rfc3339(start_date).unwrap();
     let end_date_time = DateTime::parse_from_rfc3339(end_date).unwrap();
     if start_date == end_date {
-        2
+        1
     } else {
         end_date_time
             .signed_duration_since(start_date_time)

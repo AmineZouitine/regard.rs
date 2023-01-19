@@ -79,5 +79,3 @@ pub fn get_all_working_periods_time(
         Err(err) => Err(status::BadRequest(Some(format!("{:?}", err)))),
     }
 }
-
-

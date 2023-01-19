@@ -8,6 +8,7 @@ use crate::utils::{display_watchers, server_off, Watcher};
 const PORT: u32 = 50011;
 
 // This code handles all interactions with the local database, each user argument triggers one of these functions (with the exception of display and uninstall).
+
 enum Method {
     Get,
     Delete,
