@@ -38,6 +38,11 @@ The CLI is the configuration area for your **watchers**. Here, you can create, d
 
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/53370597/212031532-83a99f14-a9b3-471c-b62e-54c2a1187aa9.gif)
 
+## 🤔 How does it work? 
+
+![- Set up GitHub (creation of the repository, the branches, and the rules of protection](https://user-images.githubusercontent.com/53370597/213881108-fc3cba55-183e-4991-9967-1011a0f3ce34.png)
+
+
 ## 🫵 Contribution
 
 Hoping to see you soon in my pull request 😊
