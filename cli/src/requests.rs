@@ -101,7 +101,7 @@ pub async fn stop(watcher_name: &String) {
     let url = format!("http://127.0.0.1:{}/api/watchers/{}", PORT, &watcher_name);
 
     match request(&url, &Method::Patch { body }).await {
-        Ok(response) => status_message(response, "Watcher succesfully started").await,
+        Ok(response) => status_message(response, "Watcher succesfully stopped").await,
         Err(err) => server_off(&err),
     }
 }
